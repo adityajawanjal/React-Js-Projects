@@ -21,7 +21,10 @@ const App = () => {
     const data = new FormData();
     data.append("name", file.name);
     data.append("file", file);
-    const res = await axios.post(`http://localhost:5000/api/uploads`, data);
+    const res = await axios.post(
+      `${import.meta.env.VITE_SERVER_URL}/api/uploads`,
+      data
+    );
     setUrl(res.data);
   };
 

@@ -6,7 +6,7 @@ exports.uploadFile = async (req, res) => {
     path: req.file.path,
   });
   const data = await file.save();
-  res.status(201).json(`http://localhost:5000/api/uploads/${data._id}`);
+  res.status(201).json(`${process.env.BASE_URL}/api/uploads/${data._id}`);
 };
 
 exports.getFile = async (req, res) => {
