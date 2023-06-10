@@ -1,6 +1,7 @@
 import React from 'react'
 import { useAccount } from './context/AccountContext'
 import ChatPage from './ChatPage';
+import SignUp from './SignUp';
 import Login from './Login';
 
 const App = () => {
@@ -9,7 +10,7 @@ const App = () => {
     <>
       {
         // <Login/>
-        account ? <Login/> : <ChatPage/> 
+        account ? <ChatPage/> : <Login/>
       }
     </>
   )

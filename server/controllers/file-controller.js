@@ -1,15 +1,24 @@
 const File = require("../models/file-model");
 
-exports.uploadFile = async (req, res) => {
-  const file = new File({
-    name: req.file.originalname,
-    path: req.file.path,
-  });
-  const data = await file.save();
-  res.status(201).json(`${process.env.BASE_URL}/api/uploads/${data._id}`);
-};
-
-exports.getFile = async (req, res) => {
-  const file = await File.findById(req.params.id);
-  res.download(file.path, file.name);
-};
+exports.googleLoginUser = async (req,res) =>{
+  try {
+    const {name , email , pic} = req.body;
+    const user = new File({
+      name,
+      email,
+      pic
+    })
+    const result = await user.save();
+    res.status(201).json(result);
+  } catch (err) {
+    console.log(err);
+  }
+}
+exports.getAllUsers = async (req,res) =>{
+  try {
+    const result = await File.find({});
+    res.status(200).json(result);
+  } catch (err) {
+    console.log(err);
+  }
+}

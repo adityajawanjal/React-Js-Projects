@@ -6,9 +6,12 @@ const fileSchema = new mongoose.Schema(
         type:String,
         required:true
     },
-    path: {
+    email: {
         type:String,
         required:true
+    },
+    pic: {
+        type:String,
     }
   },
   { timestamps: true }

@@ -1,7 +1,19 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Box, HStack, Image, Input, Stack, Text } from "@chakra-ui/react";
+import { useAccount } from "../context/AccountContext";
+import { allUsers } from "../services/api";
 
 const Left = () => {
+  const {account} = useAccount();
+  const [users,setUsers] = useState([]);
+
+  useEffect(()=>{
+    const fetchData = async () =>{
+      const res = await allUsers();
+      setUsers(res);
+    }
+    fetchData();
+  },[])
   return (
     <>
       <Stack border={"2px solid red"} minH={"100vh"} py={"6"} px={"3"}>
@@ -14,32 +26,23 @@ const Left = () => {
           mb={"10"}
         >
           <Image
-            src="https://www.whatsappimages.in/wp-content/uploads/2022/02/girls-dp-Wallpaper-576x1024.jpg"
+            src={account.pic}
             alt="dp"
             borderRadius={"full"}
             w={"14"}
             h={"14"}
           />
-          <Box>box</Box>
+          <Box>{account.name}</Box>
         </HStack>
         <Input type="search" placeholder="Search User..." mb={"10"} />
         <Stack gap={5} overflowY={"auto"} maxH={"inherit"} pb={"20"}>
-          <ChatBar />
-          <ChatBar />
-          <ChatBar />
-          <ChatBar />
-          <ChatBar />
-          <ChatBar />
-          <ChatBar />
-          <ChatBar />
-          <ChatBar />
-          <ChatBar />
-          <ChatBar />
-          <ChatBar />
-          <ChatBar />
-          <ChatBar />
-          <ChatBar />
-          <ChatBar />
+          {
+            users.map((e)=>{
+              return(
+                account.email !== e.email && <ChatBar key={e.email} user={e} />
+              )
+            })
+          }
         </Stack>
       </Stack>
     </>
@@ -48,7 +51,7 @@ const Left = () => {
 
 export default Left;
 
-const ChatBar = () => {
+const ChatBar = ({user}) => {
   return (
     <>
       <HStack
@@ -59,7 +62,7 @@ const ChatBar = () => {
         py={"1"}
       >
         <Image
-          src="https://www.whatsappimages.in/wp-content/uploads/2022/02/girls-dp-Wallpaper-576x1024.jpg"
+          src={user.pic}
           alt="dp"
           borderRadius={"full"}
           w={"16"}
@@ -67,7 +70,7 @@ const ChatBar = () => {
         />
         <Stack ml={"3"}>
           <Text fontWeight={"bold"} fontSize={"1.2rem"}>
-            Aditi
+            {user.name}
           </Text>
           <Text pos={"relative"} top={"-2"}>
             Hi Aditya !
