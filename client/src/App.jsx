@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Box, Button, Center, HStack, Heading, Input, Stack } from "@chakra-ui/react";
-import { BiEdit } from "react-icons/bi/index.esm"
+// import { BiEdit } from "react-icons"
 
 const App = () => {
   const [text, setText] = useState();
@@ -53,7 +53,7 @@ const Todo = ({ text }) => {
         py={"6"}
         textAlign={"justify"}
       />
-      <BiEdit/>
+      {/* <BiEdit/> */}
       </HStack>
     </>
   );
