@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Box, HStack, Image, Input, Stack, Text } from "@chakra-ui/react";
 import { useAccount } from "../context/AccountContext";
-import { allUsers } from "../services/api";
+import { allUsers, setConversation } from "../services/api";
 
 const Left = () => {
   const {account} = useAccount();
   const [users,setUsers] = useState([]);
+ 
+  
 
   useEffect(()=>{
     const fetchData = async () =>{
@@ -52,6 +54,18 @@ const Left = () => {
 export default Left;
 
 const ChatBar = ({user}) => {
+  const {setPerson , account , person} = useAccount();
+
+  const setTheChat = async(user)=>{
+    setPerson(user);
+    const data = {
+      senderId: account._id,
+      receiverId:person._id,
+    }
+    const result = await setConversation(data);
+    console.log(result);
+  }
+
   return (
     <>
       <HStack
@@ -60,6 +74,7 @@ const ChatBar = ({user}) => {
         h={"20"}
         px={"2"}
         py={"1"}
+        onClick={()=>setTheChat(user)}
       >
         <Image
           src={user.pic}
