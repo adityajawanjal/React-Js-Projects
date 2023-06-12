@@ -1,8 +1,11 @@
-import { HStack, Image, Input } from "@chakra-ui/react";
+import { HStack, Image, Input, Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
 import React from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
+import { useDrawer } from "../context/DrawerContext";
+
 
 const SmHeader = () => {
+  const {setOpen , setOpenProfile , setOpenMyChats} = useDrawer();
   return (
     <>
       <HStack
@@ -22,8 +25,18 @@ const SmHeader = () => {
           h={"14"}
           borderRadius={"full"}
         />
-        <Input type="search" placeholder="Search User..." maxW={'96'} />
-        <GiHamburgerMenu size={32} />
+        <Input type="search" placeholder="Search User..." maxW={'96'} onClick={()=>setOpen(true)} />
+        <Menu>
+          <MenuButton as={'button'}>
+        <GiHamburgerMenu size={32}  />
+          </MenuButton>
+          <MenuList color={'black'}>
+          <MenuItem onClick={()=>setOpenProfile(true)}>Profile</MenuItem>
+              <MenuItem onClick={()=>setOpen(true)}>Search User</MenuItem>
+              <MenuItem onClick={()=>setOpenMyChats(true)}>My Chats</MenuItem>
+              <MenuItem>Logout</MenuItem>
+          </MenuList>
+        </Menu>
       </HStack>
     </>
   );

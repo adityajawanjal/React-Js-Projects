@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import {
   Box,
   Button,
@@ -10,8 +10,14 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { ImAttachment } from "react-icons/im";
+import { useDrawer } from "../context/DrawerContext";
 
 const Right = () => {
+  const {setOpenProfile} = useDrawer();
+  const fileRef = useRef();
+  const handleFileChange = ()=>{
+    fileRef.current.click();
+  }
   return (
     <>
       <Stack
@@ -37,6 +43,8 @@ const Right = () => {
             w={"20"}
             h={"20"}
             borderRadius={"full"}
+            _hover={{cursor:"pointer"}}
+            onClick={()=>setOpenProfile(true)}
           />
           <Grid templateRows={"auto auto"} ml={"5"}>
             <Text fontWeight={"bold"} fontSize={"3xl"}>
@@ -94,8 +102,12 @@ const Right = () => {
           </Box>
         </Stack>
         <HStack h={"14"} gap={{ sm: 2, mid: 5 }} color={"whitesmoke"} px={"3"}>
-          <ImAttachment size={28} />
+          <Box _hover={{cursor:"pointer"}}>
+
+          <ImAttachment size={28} onClick={handleFileChange} />
+          </Box>
           <Input type="text" placeholder="Message..." w={"70%"} h={"full"} />
+          <Input type="file" ref={fileRef} display={'none'} />
           <Button
             bgColor={"linkedin.300"}
             color={"black"}
