@@ -14,13 +14,17 @@ import { ImAttachment } from "react-icons/im";
 const Right = () => {
   return (
     <>
-    
       <Stack
+        my={"10"}
         p={"3"}
         border={"2px solid red"}
         borderRadius={"3xl"}
         color={"whitesmoke"}
-        w={ "container.lg" }
+        w={{
+          sm: "80",
+          mid: "container.sm",
+          "2xl": "container.xl",
+        }}
       >
         <HStack
           h={"24"}
@@ -89,21 +93,20 @@ const Right = () => {
             Hi Sunaina
           </Box>
         </Stack>
-        <HStack h={"14"} gap={5} color={"whitesmoke"} px={"3"}>
+        <HStack h={"14"} gap={{ sm: 2, mid: 5 }} color={"whitesmoke"} px={"3"}>
           <ImAttachment size={28} />
           <Input type="text" placeholder="Message..." w={"70%"} h={"full"} />
           <Button
             bgColor={"linkedin.300"}
             color={"black"}
             size={"lg"}
-            w={"40"}
-            h={"14"}
+            w={{ sm: "20", mid: "40" }}
+            h={"full"}
           >
             Send
           </Button>
         </HStack>
       </Stack>
-     
     </>
   );
 };

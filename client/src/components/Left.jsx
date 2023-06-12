@@ -1,5 +1,5 @@
 import React from "react";
-import { Grid, HStack, Image, Stack, Text } from "@chakra-ui/react";
+import { Box, Grid, HStack, Image, Stack, Text } from "@chakra-ui/react";
 import { GiHamburgerMenu } from "react-icons/gi";
 
 const Left = () => {
@@ -11,6 +11,9 @@ const Left = () => {
         border={"2px solid red"}
         borderRadius={"3xl"}
         p={"5"}
+        my={'10'}
+        display={{base:"none",lg:"flex"}}
+        w={{lg:"96"}}
       >
         <HStack
           h={"20"}

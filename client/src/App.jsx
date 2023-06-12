@@ -6,9 +6,7 @@ const App = () => {
   return (
     <>
       <Box minH={"100vh"} bgColor={"back"}>
-        <Center>
           <ChatPage />
-        </Center>
       </Box>
     </>
   );
