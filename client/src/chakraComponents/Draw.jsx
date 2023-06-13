@@ -44,7 +44,7 @@ const Draw = () => {
           <DrawerCloseButton onClick={() => setOpen(false)} />
           <DrawerHeader>Create your account</DrawerHeader>
           <DrawerBody>
-            <Input placeholder="Search User..." mb={'10'} />
+            <Input placeholder="Search User..." mb={'10'} autoFocus={true} />
             <ChatCard/>
             <ChatCard/>
           </DrawerBody>
