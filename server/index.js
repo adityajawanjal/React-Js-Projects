@@ -1,33 +1,16 @@
 const express = require("express");
+require("dotenv").config();
+const cors = require("cors");
+const router = require("./routes/route");
+const connectDB = require("./db/conn");
+
 const app = express();
-const PORT = 5000;
-
-const http = require('http').Server(app);
-const cors = require('cors');
-
+app.use(express.json());
 app.use(cors());
+app.use('/api',router);
 
-const socketIO = require("socket.io")(http , {
-  cors:{
-    origin:`http://localhost:5173`
-  }
+connectDB();
+
+app.listen(process.env.PORT , ()=>{
+  console.log(`App is listening on PORT : ${process.env.PORT}`);
 })
-
-socketIO.on('connection',(socket)=>{
-  console.log('socket connected....node');
-  socket.on("message",(msg)=>{
-    socketIO.emit("sendmsg",msg);
-})
-})
-
-
-
-app.get("/api", (req, res) => {
-  res.send("Working...");
-});
-
-http.listen(PORT, () => {
-  console.log(`Server listening on ${PORT}`);
-});
-
-
