@@ -4,15 +4,17 @@ import ChatPage from "./ChatPage";
 import Draw from "./chakraComponents/Draw";
 import Model from "./chakraComponents/Model";
 import MyChatDrawer from "./chakraComponents/MyChatDrawer";
+import SignUp from "./SignUp";
 
 const App = () => {
+  const auth = localStorage.getItem("user");
   return (
     <>
       <Box minH={"100vh"} bgColor={"back"}>
-       <Draw/>
-       <MyChatDrawer/>
-       <Model/>
-          <ChatPage />
+        <Draw />
+        <MyChatDrawer />
+        <Model />
+        {auth ? <ChatPage /> : <SignUp />}
       </Box>
     </>
   );
