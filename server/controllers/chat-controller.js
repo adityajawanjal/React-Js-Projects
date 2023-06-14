@@ -66,3 +66,12 @@ exports.startSingleChat = async (req, res) => {
     res.status(400).json({ msg: `Error in startSingleChat`, err: err.message });
   }
 };
+
+exports.getAllChats = async (req, res) => {
+  try {
+    const chats = await Chat.find({ users: req.user._id });
+    res.status(200).json({ msg: `All chats Fetched !`, chats: chats });
+  } catch (err) {
+    res.status(400).json({ msg: `Error in getAllChats !`, err: err.message });
+  }
+};

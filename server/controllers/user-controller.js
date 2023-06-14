@@ -42,7 +42,7 @@ exports.signup = async (req, res) => {
       },
     });
   } catch (err) {
-    res.status(400).json({ msg: `Error in signup !` , err:err.message });
+    res.status(400).json({ msg: `Error in signup !`, err: err.message });
   }
 };
 
@@ -52,7 +52,7 @@ exports.login = async (req, res) => {
     if (!email || !password) {
       return res.status(400).json({ msg: `Email and Password required !` });
     }
-    const userExist = await User.findById({ email: email });
+    const userExist = await User.findOne({ email: email });
     if (!userExist) {
       return res.status(400).json({ msg: `No user found !` });
     }
@@ -70,6 +70,15 @@ exports.login = async (req, res) => {
       },
     });
   } catch (err) {
-    res.status(400).json({ msg: `Error in login !` });
+    res.status(400).json({ msg: `Error in login !`, err: err.message });
+  }
+};
+
+exports.getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find({}).select("name email pic");
+    res.status(200).json({ msg: `All user Fetched !`, users: users });
+  } catch (err) {
+    res.status(400).json({ msg: `Error in getAllUsers !`, err: err.message });
   }
 };
