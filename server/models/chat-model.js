@@ -10,7 +10,7 @@ const chatSchema = new mongoose.Schema(
       type: Boolean,
       default:false
     },
-    groupIcon: {
+    icon: {
         type: String,
         default:
           "https://w7.pngwing.com/pngs/831/88/png-transparent-user-profile-computer-icons-user-interface-mystique-miscellaneous-user-interface-design-smile-thumbnail.png",
@@ -19,6 +19,12 @@ const chatSchema = new mongoose.Schema(
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",
+          }
+    ],
+    messages: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Message",
           }
     ],
     latestMessage: {

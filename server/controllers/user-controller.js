@@ -89,11 +89,3 @@ exports.getAllUsers = async (req, res) => {
     res.status(400).json({ msg: `Error in getAllUsers !`, err: err.message });
   }
 };
-
-exports.test = (req, res) => {
-  try {
-    res.status(200).json({ msg: `All user Fetched !`, users: "users" });
-  } catch (err) {
-    res.status(400).json({ msg: `Error in getAllUsers !`, err: err.message });
-  }
-};

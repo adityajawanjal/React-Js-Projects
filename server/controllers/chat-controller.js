@@ -50,12 +50,14 @@ exports.startSingleChat = async (req, res) => {
         .status(400)
         .json({ msg: `Error in startSingleChat , opponent not found !` });
     }
+
     const chat = new Chat({
       chatName: opponentExists.name,
       isGroupChat: false,
       users: users,
       groupIcon: opponentExists.pic,
     });
+    chat.users.push(req.user._id);
     const newSingleChat = await chat.save();
     const completeChat = await Chat.findById(newSingleChat._id).populate(
       "users",
@@ -69,7 +71,15 @@ exports.startSingleChat = async (req, res) => {
 
 exports.getAllChats = async (req, res) => {
   try {
-    const chats = await Chat.find({ users: req.user._id });
+    const chats = await Chat.find({ users: req.user._id })
+      .populate("users",'name email pic')
+      .populate({
+        path: "messages",
+        populate: {
+          path: "senderId",
+          select: "name email pic",
+        },
+      }).populate('admin','name email pic')
     res.status(200).json({ msg: `All chats Fetched !`, chats: chats });
   } catch (err) {
     res.status(400).json({ msg: `Error in getAllChats !`, err: err.message });
