@@ -18,13 +18,15 @@ import { useDrawer } from "../context/DrawerContext";
 
 const Model = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { openProfile, setOpenProfile } = useDrawer();
+  const { openProfile, setOpenProfile, selectedPerson } = useDrawer();
   const btnRef = useRef();
+
   useEffect(() => {
     if (openProfile === true) {
       btnRef.current.click();
     }
   }, [openProfile]);
+
   return (
     <>
       <Button ref={btnRef} onClick={onOpen} display={"none"}>
@@ -39,20 +41,23 @@ const Model = () => {
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>My Profile :- </ModalHeader>
+          <ModalHeader>Profile :- </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Stack gap={5} alignItems={'center'} >
+            <Stack gap={5} alignItems={"center"}>
               <Image
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUtXuK_OR2BOza6OK2Cra_Wa2sTg9jBHshowPZsBM4HetrkMqhNm8tfF_DM5X6FYj62-k&s"
+                src={selectedPerson? selectedPerson.pic || selectedPerson.groupIcon : ""}
                 alt="My-Profile-DP"
                 w={"60"}
                 h={"60"}
                 borderRadius={"full"}
-                
               />
-              <Heading>Katrina Kaif</Heading>
-              <Text>Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus quibusdam quis recusandae rem quam temporibus sapiente voluptas velit accusamus delectus.</Text>
+              <Heading>{selectedPerson? selectedPerson.name || selectedPerson.chatName : ""}</Heading>
+              <Text>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Necessitatibus quibusdam quis recusandae rem quam temporibus
+                sapiente voluptas velit accusamus delectus.
+              </Text>
             </Stack>
           </ModalBody>
           <ModalFooter>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Grid,
@@ -13,9 +13,21 @@ import {
 } from "@chakra-ui/react";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { useDrawer } from "../context/DrawerContext";
+import { getAllMyChats } from "../services/api";
+import { handleLogout, handleStartSingleChat } from "../services/functions";
 
 const Left = () => {
-  const {setOpen , setOpenProfile} = useDrawer();
+  const { setOpen, setOpenProfile , setSelectedPerson } = useDrawer();
+  const [chats, setChats] = useState([]);
+
+  useEffect(() => {
+    const handleGetAllMyChats = async () => {
+      const res = await getAllMyChats();
+      setChats(res.chats);
+    };
+    handleGetAllMyChats();
+  }, []);
+
   return (
     <>
       <Stack
@@ -41,17 +53,17 @@ const Left = () => {
             w={"14"}
             h={"14"}
             borderRadius={"full"}
-            _hover={{cursor:"pointer"}}
-            onClick={()=>setOpenProfile(true)}
+            _hover={{ cursor: "pointer" }}
+            onClick={() => setOpenProfile(true)}
           />
           <Menu>
             <MenuButton as={"button"}>
               <GiHamburgerMenu size={32} />
             </MenuButton>
             <MenuList color={"black"}>
-              <MenuItem onClick={()=>setOpenProfile(true)}>Profile</MenuItem>
-              <MenuItem onClick={()=>setOpen(true)}>Search User</MenuItem>
-              <MenuItem>Logout</MenuItem>
+              <MenuItem onClick={() =>{setSelectedPerson(); setOpenProfile(true)}}>Profile</MenuItem>
+              <MenuItem onClick={() => setOpen(true)}>Search User</MenuItem>
+              <MenuItem onClick={()=>handleLogout()}>Logout</MenuItem>
             </MenuList>
           </Menu>
         </HStack>
@@ -71,18 +83,13 @@ const Left = () => {
             },
           }}
         >
-          <ChatCard />
-          <ChatCard />
-          <ChatCard />
-          <ChatCard />
-          <ChatCard />
-          <ChatCard />
-          <ChatCard />
-          <ChatCard />
-          <ChatCard />
-          <ChatCard />
-          <ChatCard />
-          <ChatCard />
+          {chats ? 
+            chats.map((e) => {
+              return <ChatCard key={e._id} name={e.chatName} pic={e.groupIcon} user={e} />
+            })
+           : 
+            <Box color={"whitesmoke"}>Start a new Chat</Box>
+          }
         </Stack>
       </Stack>
     </>
@@ -91,23 +98,43 @@ const Left = () => {
 
 export default Left;
 
-export const ChatCard = () => {
-  const {setOpenProfile} = useDrawer();
+export const ChatCard = ({ name , pic , user }) => {
+
+  const { setOpenProfile, setSelectedPerson, setCurrentChat } = useDrawer();
+
   return (
     <>
-      <HStack h={"20"} py={"2"} px={'2'} alignItems={"center"} _hover={{cursor:"pointer" , bgColor:"whatsapp.100",color:"black",borderRadius:"3xl"}} >
+      <HStack
+        h={"20"}
+        py={"2"}
+        px={"2"}
+        alignItems={"center"}
+        _hover={{
+          cursor: "pointer",
+          bgColor: "whatsapp.100",
+          color: "black",
+          borderRadius: "3xl",
+        }}
+        onClick={() => {setSelectedPerson(user); handleStartSingleChat(user._id)}}
+      >
         <Image
-          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUtXuK_OR2BOza6OK2Cra_Wa2sTg9jBHshowPZsBM4HetrkMqhNm8tfF_DM5X6FYj62-k&s"
+          src={pic}
           alt="My-Profile-DP"
           w={"10"}
           h={"10"}
           borderRadius={"full"}
-          _hover={{cursor:"pointer"}}
-          onClick={()=>setOpenProfile(true)}
+          _hover={{ cursor: "pointer" }}
+          onClick={() => setOpenProfile(true)}
         />
-        <Grid templateRows={"auto auto"} ml={"2"}>
+        <Grid
+          templateRows={"auto auto"}
+          ml={"2"}
+          onClick={() => {
+            setCurrentChat(user);
+          }}
+        >
           <Text fontWeight={"bold"} fontSize={"md"}>
-            Katrina kaif
+            {name}
           </Text>
           <Text fontSize={"sm"}>Katrina kaif</Text>
         </Grid>

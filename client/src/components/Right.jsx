@@ -14,11 +14,15 @@ import { IoSend } from "react-icons/io5";
 import { useDrawer } from "../context/DrawerContext";
 
 const Right = () => {
-  const { setOpenProfile } = useDrawer();
+  const { setOpenProfile, setSelectedPerson , currentChat} = useDrawer();
+  console.log(currentChat);
+
   const fileRef = useRef();
+
   const handleFileChange = () => {
     fileRef.current.click();
   };
+
   return (
     <>
       <Stack
@@ -39,17 +43,20 @@ const Right = () => {
           borderBottom={"2px solid orange"}
         >
           <Image
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUtXuK_OR2BOza6OK2Cra_Wa2sTg9jBHshowPZsBM4HetrkMqhNm8tfF_DM5X6FYj62-k&s"
+            src={currentChat? currentChat.pic || currentChat.groupIcon :""}
             alt="My-Profile-DP"
             w={"20"}
             h={"20"}
             borderRadius={"full"}
             _hover={{ cursor: "pointer" }}
-            onClick={() => setOpenProfile(true)}
+            onClick={() => {
+              setSelectedPerson(currentChat);
+              setOpenProfile(true);
+            }}
           />
           <Grid templateRows={"auto auto"} ml={"5"}>
             <Text fontWeight={"bold"} fontSize={{ base: "lg", sm: "3xl" }}>
-              Katrina kaif
+             {currentChat? currentChat.name || currentChat.chatName :""}
             </Text>
             <Text fontSize={"md"}>offline</Text>
           </Grid>

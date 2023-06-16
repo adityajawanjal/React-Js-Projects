@@ -7,7 +7,9 @@ import MyChatDrawer from "./chakraComponents/MyChatDrawer";
 import SignUp from "./SignUp";
 
 const App = () => {
-  const auth = localStorage.getItem("user");
+  
+  const auth = localStorage.getItem("chatUser");
+
   return (
     <>
       <Box minH={"100vh"} bgColor={"back"}>

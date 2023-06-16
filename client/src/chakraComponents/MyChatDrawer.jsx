@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Drawer,
   DrawerBody,
@@ -9,21 +9,30 @@ import {
   DrawerCloseButton,
   Button,
   useDisclosure,
-  Input,
 } from "@chakra-ui/react";
 import { useDrawer } from "../context/DrawerContext";
 import { ChatCard } from "../components/Left";
+import { getAllMyChats } from "../services/api";
 
 const MyChatDrawer = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = useRef();
   const { openMyChats, setOpenMyChats } = useDrawer();
+  const [chats, setChats] = useState([]);
 
   useEffect(() => {
     if (openMyChats === true) {
       btnRef.current.click();
     }
   }, [openMyChats]);
+
+  useEffect(() => {
+    const handleGetAllMyChats = async () => {
+      const res = await getAllMyChats();
+      setChats(res.chats);
+    };
+    handleGetAllMyChats();
+  }, []);
 
   return (
     <>
@@ -44,10 +53,9 @@ const MyChatDrawer = () => {
           <DrawerCloseButton onClick={() => setOpenMyChats(false)} />
           <DrawerHeader>My Chats :- </DrawerHeader>
           <DrawerBody>
-            <ChatCard/>
-            <ChatCard/>
-            <ChatCard/>
-            <ChatCard/>
+            {chats?.map((e) => {
+              return <ChatCard key={e._id} name={e.name || e.groupName} pic={e.pic || e.groupIcon} user={e} />;
+            })}
           </DrawerBody>
           <DrawerFooter>
             <Button

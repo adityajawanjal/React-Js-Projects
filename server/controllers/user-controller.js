@@ -3,6 +3,12 @@ const bcrypt = require("bcrypt");
 const cloudinary = require("cloudinary").v2;
 const jwt = require("jsonwebtoken");
 
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET,
+});
+
 exports.signup = async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -22,10 +28,11 @@ exports.signup = async (req, res) => {
       password: hashedPassword,
     });
     if (req.file) {
-      const result = await cloudinary.uploader.upload(req.file.path, {
-        public_id: req.file.name,
-        folder: `Chat-King/Users`,
+      console.log(req.file);
+      const result = await cloudinary.uploader.upload(`${req.file.path}`, {
+        public_id: req.file.originalname,
       });
+      console.log(result);
       if (!result) {
         return res.status(400).json({ msg: `Error in image upload !` });
       }
@@ -42,7 +49,7 @@ exports.signup = async (req, res) => {
       },
     });
   } catch (err) {
-    res.status(400).json({ msg: `Error in signup !`, err: err.message });
+    res.status(400).json({ err });
   }
 };
 
@@ -78,6 +85,14 @@ exports.getAllUsers = async (req, res) => {
   try {
     const users = await User.find({}).select("name email pic");
     res.status(200).json({ msg: `All user Fetched !`, users: users });
+  } catch (err) {
+    res.status(400).json({ msg: `Error in getAllUsers !`, err: err.message });
+  }
+};
+
+exports.test = (req, res) => {
+  try {
+    res.status(200).json({ msg: `All user Fetched !`, users: "users" });
   } catch (err) {
     res.status(400).json({ msg: `Error in getAllUsers !`, err: err.message });
   }

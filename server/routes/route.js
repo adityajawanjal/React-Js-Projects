@@ -5,6 +5,7 @@ const {
   signup,
   login,
   getAllUsers,
+  test,
 } = require("../controllers/user-controller");
 const {
   startGroupChat,
@@ -16,7 +17,7 @@ const router = express.Router();
 router.post(`/users/signup`, uploadProfilePic.single("pic"), signup);
 router.post(`/users/login`, login);
 
-router.get(`/users`, getAllUsers);
+router.get(`/users`,auth, getAllUsers);
 
 router.post(
   `/chats/newgroup`,
@@ -27,5 +28,6 @@ router.post(
 router.post(`/chats/newchat`, auth, startSingleChat);
 
 router.get(`/chats`, auth, getAllChats);
+router.get(`/test`, test);
 
 module.exports = router;

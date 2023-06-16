@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, HStack, Heading, Input, Stack, Text } from "@chakra-ui/react";
-import { handleLogin } from "./services/functions";
+import { handleLogin, handleSignup } from "./services/functions";
 
 const SignUp = () => {
   const [login, setLogin] = useState(false);
@@ -8,8 +8,6 @@ const SignUp = () => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [pic, setPic] = useState();
-
-  const handleSignup = () => {};
 
   return (
     <>
@@ -59,7 +57,7 @@ const SignUp = () => {
             onClick={
               login
                 ? () => handleLogin({ email, password })
-                : () => handleSignup()
+                : () => handleSignup({ name, email, password, pic })
             }
           >
             {login ? "Login" : "Sign Up"}

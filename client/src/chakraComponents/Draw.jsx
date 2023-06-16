@@ -10,20 +10,30 @@ import {
   Button,
   useDisclosure,
   Input,
+  Box,
 } from "@chakra-ui/react";
 import { useDrawer } from "../context/DrawerContext";
 import { ChatCard } from "../components/Left";
+import { getAllUsers } from "../services/api";
 
 const Draw = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = useRef();
-  const { open, setOpen } = useDrawer();
+  const { open, setOpen, users, setUsers } = useDrawer();
 
   useEffect(() => {
     if (open === true) {
       btnRef.current.click();
     }
   }, [open]);
+
+  useEffect(() => {
+    const handleGetAllUsers = async () => {
+      const res = await getAllUsers();
+      setUsers(res.users);
+    };
+    handleGetAllUsers();
+  }, []);
 
   return (
     <>
@@ -43,10 +53,15 @@ const Draw = () => {
         <DrawerContent>
           <DrawerCloseButton onClick={() => setOpen(false)} />
           <DrawerHeader>Create your account</DrawerHeader>
-          <DrawerBody>
-            <Input placeholder="Search User..." mb={'10'} autoFocus={true} />
-            <ChatCard/>
-            <ChatCard/>
+          <DrawerBody >
+            <Input placeholder="Search User..." mb={"10"} autoFocus={true} />
+            <Box onClick={()=>{onClose();setOpen(false)}}>
+            {users
+              ? users.map((e) => {
+                  return <ChatCard key={e._id} name={e.name} pic={e.pic} user={e} />;
+                })
+              : "No User"}
+              </Box>
           </DrawerBody>
           <DrawerFooter>
             <Button
