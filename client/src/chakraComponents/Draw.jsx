@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import {
   Drawer,
   DrawerBody,
@@ -12,28 +12,10 @@ import {
   Input,
   Box,
 } from "@chakra-ui/react";
-import { useDrawer } from "../context/DrawerContext";
-import { ChatCard } from "../components/Left";
-import { getAllUsers } from "../services/api";
 
 const Draw = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = useRef();
-  const { open, setOpen, users, setUsers } = useDrawer();
-
-  useEffect(() => {
-    if (open === true) {
-      btnRef.current.click();
-    }
-  }, [open]);
-
-  useEffect(() => {
-    const handleGetAllUsers = async () => {
-      const res = await getAllUsers();
-      setUsers(res.users);
-    };
-    handleGetAllUsers();
-  }, []);
 
   return (
     <>
@@ -43,34 +25,24 @@ const Draw = () => {
       <Drawer
         isOpen={isOpen}
         placement="left"
-        onClose={() => {
-          onClose();
-          setOpen(false);
-        }}
         finalFocusRef={btnRef}
+        onClose={onClose}
       >
         <DrawerOverlay />
         <DrawerContent>
-          <DrawerCloseButton onClick={() => setOpen(false)} />
+          <DrawerCloseButton  />
           <DrawerHeader>Create your account</DrawerHeader>
           <DrawerBody >
             <Input placeholder="Search User..." mb={"10"} autoFocus={true} />
-            <Box onClick={()=>{onClose();setOpen(false)}}>
-            {users
-              ? users.map((e) => {
-                  return <ChatCard key={e._id} name={e.name} pic={e.pic} user={e} />;
-                })
-              : "No User"}
+            <Box>
+            box
               </Box>
           </DrawerBody>
           <DrawerFooter>
             <Button
               variant="outline"
               mr={3}
-              onClick={() => {
-                setOpen(false);
-                onClose();
-              }}
+              
             >
               Cancel
             </Button>

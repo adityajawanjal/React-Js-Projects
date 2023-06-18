@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Box,
   Button,
@@ -11,17 +11,17 @@ import {
 } from "@chakra-ui/react";
 import { ImAttachment } from "react-icons/im";
 import { IoSend } from "react-icons/io5";
-import { useDrawer } from "../context/DrawerContext";
+
 
 const Right = () => {
-  const { setOpenProfile, setSelectedPerson , currentChat} = useDrawer();
-  console.log(currentChat);
 
   const fileRef = useRef();
 
   const handleFileChange = () => {
     fileRef.current.click();
   };
+
+  const [text, setText] = useState();
 
   return (
     <>
@@ -43,20 +43,17 @@ const Right = () => {
           borderBottom={"2px solid orange"}
         >
           <Image
-            src={currentChat? currentChat.pic || currentChat.groupIcon :""}
+            src={''}
             alt="My-Profile-DP"
             w={"20"}
             h={"20"}
             borderRadius={"full"}
             _hover={{ cursor: "pointer" }}
-            onClick={() => {
-              setSelectedPerson(currentChat);
-              setOpenProfile(true);
-            }}
+           
           />
           <Grid templateRows={"auto auto"} ml={"5"}>
             <Text fontWeight={"bold"} fontSize={{ base: "lg", sm: "3xl" }}>
-             {currentChat? currentChat.name || currentChat.chatName :""}
+              hoo
             </Text>
             <Text fontSize={"md"}>offline</Text>
           </Grid>
@@ -80,20 +77,20 @@ const Right = () => {
           }}
         >
           <Box
-            maxW={"80"}
-            border={"1px solid blue"}
-            borderRadius={"3xl"}
-            p={"3"}
-            wordBreak={"break-word"}
-            h={"auto"}
-            alignSelf={"flex-start"}
-            mb={"3"}
-            color={"linkedin.100"}
-            fontSize={"1.1rem"}
-          >
-            Hi Aditya.
-          </Box>
-          <Box
+              maxW={"80"}
+              border={"1px solid blue"}
+              borderRadius={"3xl"}
+              p={"3"}
+              wordBreak={"break-word"}
+              h={"auto"}
+              alignSelf={"flex-start"}
+              mb={"3"}
+              color={"linkedin.100"}
+              fontSize={"1.1rem"}
+            >
+             messages
+            </Box>
+            <Box
             maxW={"80"}
             mb={"3"}
             color={"whatsapp.100"}
@@ -108,12 +105,20 @@ const Right = () => {
           >
             Hi Sunaina
           </Box>
-        </Stack>
+          
+               
+      </Stack>
         <HStack h={"14"} gap={5} color={"whitesmoke"} px={"3"}>
           <Box _hover={{ cursor: "pointer" }}>
             <ImAttachment size={28} onClick={handleFileChange} />
           </Box>
-          <Input type="text" placeholder="Message..." w={"70%"} h={"full"} />
+          <Input
+            type="text"
+            placeholder="Message..."
+            w={"70%"}
+            h={"full"}
+            onChange={(e) => setText(e.target.value)}
+          />
           <Input type="file" ref={fileRef} display={"none"} />
           <Button
             bgColor={"linkedin.300"}
@@ -122,6 +127,7 @@ const Right = () => {
             w={{ sm: "20", mid: "40" }}
             h={"full"}
             display={{ base: "none", sm: "flex" }}
+            
           >
             Send
           </Button>

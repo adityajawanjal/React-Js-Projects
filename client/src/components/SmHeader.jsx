@@ -9,10 +9,10 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
-import { useDrawer } from "../context/DrawerContext";
+
 
 const SmHeader = () => {
-  const { setOpen, setOpenProfile, setOpenMyChats } = useDrawer();
+  
 
   return (
     <>
@@ -37,16 +37,16 @@ const SmHeader = () => {
           type="search"
           placeholder="Search User..."
           maxW={"96"}
-          onClick={() => setOpen(true)}
+         
         />
         <Menu>
           <MenuButton as={"button"}>
             <GiHamburgerMenu size={32} />
           </MenuButton>
           <MenuList color={"black"}>
-            <MenuItem onClick={() => setOpenProfile(true)}>Profile</MenuItem>
-            <MenuItem onClick={() => setOpen(true)}>Search User</MenuItem>
-            <MenuItem onClick={() => setOpenMyChats(true)}>My Chats</MenuItem>
+            <MenuItem >Profile</MenuItem>
+            <MenuItem>Search User</MenuItem>
+            <MenuItem >My Chats</MenuItem>
             <MenuItem>Logout</MenuItem>
           </MenuList>
         </Menu>

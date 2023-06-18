@@ -9,6 +9,7 @@ const DrawerProvider = ({ children }) => {
   const [users, setUsers] = useState([]);
   const [selectedPerson, setSelectedPerson] = useState();
   const [currentChat, setCurrentChat] = useState();
+  const [myInfo, setMyInfo] = useState();
 
   return (
     <DrawerContext.Provider
@@ -24,7 +25,9 @@ const DrawerProvider = ({ children }) => {
         selectedPerson,
         setSelectedPerson,
         currentChat,
-        setCurrentChat
+        setCurrentChat,
+        myInfo,
+        setMyInfo
       }}
     >
       {children}

@@ -21,3 +21,18 @@ exports.sendMessage = async (req, res) => {
     res.status(400).json({ msg: "err in send Message", err: err.message });
   }
 };
+
+exports.getAllMessages = async (req,res) =>{
+  try {
+    const {chatId} = req.body;
+    const messages = await Chat.findOne({_id:chatId}).populate({
+      path:'users',
+      select:'name email pic'
+    }).populate({
+      path:'messages'
+    })
+    res.status(200).json(messages);
+  } catch (err) {
+    res.status(400).json({ msg: "err in getAllMessages", err: err.message });
+  }
+}

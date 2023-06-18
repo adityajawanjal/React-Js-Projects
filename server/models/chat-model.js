@@ -10,7 +10,7 @@ const chatSchema = new mongoose.Schema(
       type: Boolean,
       default:false
     },
-    icon: {
+    groupIcon: {
         type: String,
         default:
           "https://w7.pngwing.com/pngs/831/88/png-transparent-user-profile-computer-icons-user-interface-mystique-miscellaneous-user-interface-design-smile-thumbnail.png",

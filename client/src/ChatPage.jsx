@@ -3,11 +3,10 @@ import { Box, Grid } from "@chakra-ui/react";
 import Left from "./components/Left";
 import Right from "./components/Right";
 import SmHeader from "./components/SmHeader";
-import { useDrawer } from "./context/DrawerContext";
+
 
 const chatPage = () => {
 
-  const {currentChat} = useDrawer();
 
   return (
     <>
@@ -20,14 +19,10 @@ const chatPage = () => {
         justifyContent={"center"}
       >
         <Left />
-        {
-          currentChat ?
+        
           <Right />
-          :
-         <>
-          ""
-         </>
-        }
+        
+        
       </Grid>
     </>
   );

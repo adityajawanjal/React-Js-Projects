@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, HStack, Heading, Input, Stack, Text } from "@chakra-ui/react";
-import { handleLogin, handleSignup } from "./services/functions";
+
 
 const SignUp = () => {
   const [login, setLogin] = useState(false);
@@ -54,11 +54,7 @@ const SignUp = () => {
           <Button
             bgColor={"orange.300"}
             h={"14"}
-            onClick={
-              login
-                ? () => handleLogin({ email, password })
-                : () => handleSignup({ name, email, password, pic })
-            }
+           
           >
             {login ? "Login" : "Sign Up"}
           </Button>

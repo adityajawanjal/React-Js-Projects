@@ -18,14 +18,7 @@ import { useDrawer } from "../context/DrawerContext";
 
 const Model = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { openProfile, setOpenProfile, selectedPerson } = useDrawer();
   const btnRef = useRef();
-
-  useEffect(() => {
-    if (openProfile === true) {
-      btnRef.current.click();
-    }
-  }, [openProfile]);
 
   return (
     <>
@@ -34,10 +27,7 @@ const Model = () => {
       </Button>
       <Modal
         isOpen={isOpen}
-        onClose={() => {
-          onClose();
-          setOpenProfile(false);
-        }}
+       onClose={onClose}
       >
         <ModalOverlay />
         <ModalContent>
@@ -46,17 +36,19 @@ const Model = () => {
           <ModalBody>
             <Stack gap={5} alignItems={"center"}>
               <Image
-                src={selectedPerson? selectedPerson.pic || selectedPerson.groupIcon : ""}
+                src={
+                   ""
+                }
                 alt="My-Profile-DP"
                 w={"60"}
                 h={"60"}
                 borderRadius={"full"}
               />
-              <Heading>{selectedPerson? selectedPerson.name || selectedPerson.chatName : ""}</Heading>
-              <Text>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Necessitatibus quibusdam quis recusandae rem quam temporibus
-                sapiente voluptas velit accusamus delectus.
+              <Heading>
+                { ""}
+              </Heading>
+              <Text fontSize={"2xl"}>
+               Good cat
               </Text>
             </Stack>
           </ModalBody>
@@ -64,14 +56,10 @@ const Model = () => {
             <Button
               colorScheme="blue"
               mr={3}
-              onClick={() => {
-                onClose();
-                setOpenProfile(false);
-              }}
+              
             >
               Close
             </Button>
-            <Button variant="ghost">Secondary Action</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

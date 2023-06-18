@@ -89,3 +89,11 @@ exports.getAllUsers = async (req, res) => {
     res.status(400).json({ msg: `Error in getAllUsers !`, err: err.message });
   }
 };
+
+exports.getSelfInfo = async (req,res) =>{
+  try {
+    res.status(201).json({ msg: `My Info Fetched !`, me: req.user });
+  } catch (err) {
+    res.status(400).json({ msg: `Error in getSelfInfo !`, err: err.message });
+  }
+}
