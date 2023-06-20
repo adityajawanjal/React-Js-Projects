@@ -1,6 +1,13 @@
 import React, { useState } from "react";
-import { Button, HStack, Heading, Input, Stack, Text } from "@chakra-ui/react";
-
+import {
+  Button,
+  HStack,
+  Heading,
+  Input,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
+import { handleLogin, handleSignUp } from "./services/functions";
 
 const SignUp = () => {
   const [login, setLogin] = useState(false);
@@ -50,31 +57,31 @@ const SignUp = () => {
             border={"none"}
             onChange={(e) => setPic(e.target.files[0])}
           />
-
-          <Button
-            bgColor={"orange.300"}
-            h={"14"}
-           
-          >
+          <Button bgColor={"orange.300"} h={"14"} onClick={login ?()=> handleLogin({email , password}) :()=> handleSignUp({name , email , password , pic})} >
             {login ? "Login" : "Sign Up"}
           </Button>
-          <Text alignSelf={"center"}>
-            {login ? "Don`t have an account ? " : "Already have an account ?"}{" "}
-          </Text>
-          <Text
-            display={"inline"}
-            fontSize={"lg"}
-            color={"red.400"}
-            pb={"1"}
-            borderBottom={"blue"}
-            ml={"3"}
-            _hover={{ cursor: "pointer" }}
-            onClick={() => {
-              setLogin(!login);
-            }}
+          <Stack
+            flexDir={{ base: "column", mid: "row" }}
+            placeItems={"center"}
+            justifyContent={"center"}
           >
-            {login ? "Sign Up" : "Login"}
-          </Text>
+            <Text alignSelf={"center"}>
+              {login ? "Don`t have an account ? " : "Already have an account ?"}{" "}
+            </Text>
+            <Text
+              fontSize={"lg"}
+              color={"red.400"}
+              pb={"1"}
+              borderBottom={"blue"}
+              ml={"3"}
+              _hover={{ cursor: "pointer" }}
+              onClick={() => {
+                setLogin(!login);
+              }}
+            >
+              {login ? "Sign Up" : "Login"}
+            </Text>
+          </Stack>
         </Stack>
         <Stack alignSelf={"self-start"}>
           <Heading>Welocome to the Chat World !</Heading>

@@ -14,18 +14,19 @@ import {
   Stack,
 } from "@chakra-ui/react";
 import { useAccount } from "../context/AppContext";
-import { MyChatCards } from "../components/ChatCards";
+import { all } from "axios";
+import { SearchChatCards } from "../components/ChatCards";
 
-const MyChatDrawer = () => {
+const SearchUserDrawer = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = useRef();
-  const { allMyChats , openMyChatDrawer , setOpenMyChatDrawer } = useAccount();
+  const { openSearch, setOpenSearch, allUsers } = useAccount();
 
   useEffect(() => {
-    if (openMyChatDrawer) {
+    if (openSearch) {
       btnRef.current.click();
     }
-  }, [openMyChatDrawer]);
+  }, [openSearch]);
 
   return (
     <>
@@ -38,26 +39,26 @@ const MyChatDrawer = () => {
         finalFocusRef={btnRef}
         onClose={() => {
           onClose();
-          setOpenMyChatDrawer(false);
+          setOpenSearch(false);
         }}
       >
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton
             onClick={() => {
-              setOpenMyChatDrawer(false);
+              setOpenSearch(false);
               onClose();
             }}
           />
-          <DrawerHeader>My Chats : </DrawerHeader>
+          <DrawerHeader>Create your account</DrawerHeader>
           <DrawerBody>
             <Input placeholder="Search User..." mb={"10"} autoFocus={true} />
-            <Stack h={"lg"}>
-              {allMyChats
-                ? allMyChats.map((e) => {
-                    return <MyChatCards key={e._id} chat={e} />;
+            <Stack>
+              {allUsers
+                ? allUsers.map((e) => {
+                    return <SearchChatCards key={e._id} user={e} />;
                   })
-                : "Start a New Chat !"}
+                : "No User Found"}
             </Stack>
           </DrawerBody>
           <DrawerFooter>
@@ -65,7 +66,7 @@ const MyChatDrawer = () => {
               variant="outline"
               mr={3}
               onClick={() => {
-                setOpenMyChatDrawer(false);
+                setOpenSearch(false);
                 onClose();
               }}
             >
@@ -74,7 +75,7 @@ const MyChatDrawer = () => {
             <Button
               colorScheme="blue"
               onClick={() => {
-                setOpenMyChatDrawer(false);
+                setOpenSearch(false);
                 onClose();
               }}
             >
@@ -87,4 +88,4 @@ const MyChatDrawer = () => {
   );
 };
 
-export default MyChatDrawer;
+export default SearchUserDrawer;

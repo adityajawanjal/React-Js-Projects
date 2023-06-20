@@ -14,11 +14,18 @@ import {
   Heading,
   Text,
 } from "@chakra-ui/react";
-import { useDrawer } from "../context/DrawerContext";
+import { useAccount } from "../context/AppContext";
 
-const Model = () => {
+const ProfileModal = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = useRef();
+  const { openProfile, setOpenProfile, auth } = useAccount();
+
+  useEffect(() => {
+    if (openProfile) {
+      btnRef.current.click();
+    }
+  }, [openProfile]);
 
   return (
     <>
@@ -27,7 +34,11 @@ const Model = () => {
       </Button>
       <Modal
         isOpen={isOpen}
-       onClose={onClose}
+        onClose={() => {
+          onClose();
+          setOpenProfile(false);
+        }}
+        size={{ base: "xs", sm: "sm", mid: "lg" }}
       >
         <ModalOverlay />
         <ModalContent>
@@ -36,27 +47,24 @@ const Model = () => {
           <ModalBody>
             <Stack gap={5} alignItems={"center"}>
               <Image
-                src={
-                   ""
-                }
+                src={auth ? auth.pic : ""}
                 alt="My-Profile-DP"
                 w={"60"}
                 h={"60"}
                 borderRadius={"full"}
               />
-              <Heading>
-                { ""}
-              </Heading>
-              <Text fontSize={"2xl"}>
-               Good cat
-              </Text>
+              <Heading>{auth ? auth.name : ""}</Heading>
+              <Text fontSize={"2xl"}>{auth ? auth.email : ""}</Text>
             </Stack>
           </ModalBody>
           <ModalFooter>
             <Button
               colorScheme="blue"
               mr={3}
-              
+              onClick={() => {
+                onClose();
+                setOpenProfile(false);
+              }}
             >
               Close
             </Button>
@@ -67,4 +75,4 @@ const Model = () => {
   );
 };
 
-export default Model;
+export default ProfileModal;

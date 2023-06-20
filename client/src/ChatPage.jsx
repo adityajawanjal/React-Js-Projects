@@ -1,12 +1,45 @@
-import React from "react";
-import { Box, Grid } from "@chakra-ui/react";
+import React, { useEffect } from "react";
+import { Grid } from "@chakra-ui/react";
 import Left from "./components/Left";
 import Right from "./components/Right";
 import SmHeader from "./components/SmHeader";
-
+import { getAllMyChats, getAllUsers } from "./services/api";
+import { useAccount } from "./context/AppContext";
 
 const chatPage = () => {
+  const { setAllUsers , allusers , setAllMyChats , allMyChats} = useAccount();
 
+  const handleGetAllUsers = async () => {
+    try {
+      const res = await getAllUsers();
+      if (!res.users) {
+        console.log(res.msg);
+      }
+      setAllUsers(res.users);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleGetAllMyChats = async () =>{
+    try {
+      const res = await getAllMyChats();
+      if(!res.chats){
+        console.log(res.msg);
+      }
+      setAllMyChats(res.chats);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  useEffect(() => {
+    handleGetAllUsers();
+  }, []);
+
+  useEffect(()=>{
+    handleGetAllMyChats();
+  },[])
 
   return (
     <>
@@ -19,10 +52,7 @@ const chatPage = () => {
         justifyContent={"center"}
       >
         <Left />
-        
-          <Right />
-        
-        
+        <Right />
       </Grid>
     </>
   );

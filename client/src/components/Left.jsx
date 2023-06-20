@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
-  Box,
-  Grid,
   HStack,
   Image,
   Menu,
@@ -9,14 +7,17 @@ import {
   MenuItem,
   MenuList,
   Stack,
-  Text,
 } from "@chakra-ui/react";
 import { GiHamburgerMenu } from "react-icons/gi";
-
+import ProfileModal from "../chakraComponents/ProfileModal";
+import { useAccount } from "../context/AppContext";
+import SearchUserDrawer from "../chakraComponents/SearchUserDrawer";
+import { handleLogout } from "../services/functions";
+import { MyChatCards } from "./ChatCards";
+import PersonModal from "../chakraComponents/PersonModal";
 
 const Left = () => {
-
-
+  const { setOpenProfile , auth , setOpenSearch , allMyChats  } = useAccount();
   return (
     <>
       <Stack
@@ -37,22 +38,22 @@ const Left = () => {
           pb={"2"}
         >
           <Image
-            src={''}
+            src={auth?auth.pic:''}
             alt="My-Profile-DP"
             w={"14"}
             h={"14"}
             borderRadius={"full"}
             _hover={{ cursor: "pointer" }}
-            
+           onClick={()=>{setOpenProfile(true)}} 
           />
           <Menu>
             <MenuButton as={"button"} >
               <GiHamburgerMenu size={32} />
             </MenuButton>
             <MenuList color={"black"}>
-              <MenuItem >Profile</MenuItem>
-              <MenuItem >Search User</MenuItem>
-              <MenuItem >Logout</MenuItem>
+              <MenuItem onClick={()=>{setOpenProfile(true)}} >Profile</MenuItem>
+              <MenuItem onClick={()=>{setOpenSearch(true)}} >Search User</MenuItem>
+              <MenuItem onClick={()=>handleLogout()} >Logout</MenuItem>
             </MenuList>
           </Menu>
         </HStack>
@@ -72,9 +73,18 @@ const Left = () => {
             },
           }}
         >
-          good
+          {
+            allMyChats ? allMyChats.map((e)=>{
+              return(
+                <MyChatCards key={e._id} chat={e} />
+              )
+            }) :'Start a New Chat !'
+          }
         </Stack>
       </Stack>
+      <ProfileModal/>
+      <SearchUserDrawer/>
+      <PersonModal/>
     </>
   );
 };

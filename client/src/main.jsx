@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
-import DrawerProvider from "./context/DrawerContext";
+import AppProvider from "./context/AppContext.jsx";
 
 const theme = extendTheme({
   colors: {
@@ -21,9 +21,9 @@ const theme = extendTheme({
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <ChakraProvider theme={theme}>
-      <DrawerProvider>
+      <AppProvider>
         <App />
-      </DrawerProvider>
+      </AppProvider>
     </ChakraProvider>
   </React.StrictMode>
 );

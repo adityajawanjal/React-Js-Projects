@@ -1,22 +1,34 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box } from "@chakra-ui/react";
 import ChatPage from "./ChatPage";
-import Draw from "./chakraComponents/Draw";
-import Model from "./chakraComponents/Model";
-import MyChatDrawer from "./chakraComponents/MyChatDrawer";
 import SignUp from "./SignUp";
+import { useAccount } from "./context/AppContext";
+import { myInfo } from "./services/api";
 
 const App = () => {
-  
-  const auth = localStorage.getItem("chatUser");
+  const token = localStorage.getItem("chatUser");
+  const { setAuth , auth } = useAccount();
+
+  const handleAuth = async () => {
+    try {
+      const res = await myInfo();
+      if (!res.me) {
+        console.log(res.msg);
+      }
+      setAuth(res.me);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(()=>{
+   handleAuth();
+  },[token])
 
   return (
     <>
       <Box minH={"100vh"} bgColor={"back"}>
-        <Draw />
-        <MyChatDrawer />
-        <Model />
-        {auth ? <ChatPage /> : <SignUp />}
+        {token ? <ChatPage /> : <SignUp />}
       </Box>
     </>
   );
