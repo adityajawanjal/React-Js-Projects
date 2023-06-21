@@ -4,10 +4,12 @@ import {
   HStack,
   Heading,
   Input,
+  Spinner,
   Stack,
   Text,
 } from "@chakra-ui/react";
 import { handleLogin, handleSignUp } from "./services/functions";
+import { useAccount } from "./context/AppContext";
 
 const SignUp = () => {
   const [login, setLogin] = useState(false);
@@ -15,6 +17,8 @@ const SignUp = () => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [pic, setPic] = useState();
+
+  const { setLoading, loading } = useAccount();
 
   return (
     <>
@@ -57,13 +61,43 @@ const SignUp = () => {
             border={"none"}
             onChange={(e) => setPic(e.target.files[0])}
           />
-          <Button bgColor={"orange.300"} h={"14"} onClick={login ?()=> handleLogin({email , password}) :()=> handleSignUp({name , email , password , pic})} >
-            {login ? "Login" : "Sign Up"}
+          <Button
+            bgColor={"orange.300"}
+            h={"14"}
+            onClick={
+              login
+                ? () => {
+                    handleLogin({ email, password });
+                    setLoading(true);
+                  }
+                : () => {
+                    handleSignUp({ name, email, password, pic });
+                    setLoading(true);
+                  }
+            }
+          >
+            {loading ? (
+              <Spinner
+                thickness="4px"
+                speed="0.65s"
+                emptyColor="gray.200"
+                color="blue.500"
+                size="md"
+                w={"10"}
+                h={"10"}
+                alignSelf={"center"}
+              />
+            ) : login ? (
+              "Login"
+            ) : (
+              "Sign Up"
+            )}
           </Button>
           <Stack
             flexDir={{ base: "column", mid: "row" }}
             placeItems={"center"}
             justifyContent={"center"}
+            display={loading ? "none" : "flex"}
           >
             <Text alignSelf={"center"}>
               {login ? "Don`t have an account ? " : "Already have an account ?"}{" "}

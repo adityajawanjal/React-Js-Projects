@@ -12,6 +12,7 @@ const {
   startGroupChat,
   startSingleChat,
   getAllChats,
+  getSingleChat,
 } = require("../controllers/chat-controller");
 const { sendMessage, getAllMessages } = require("../controllers/message-controller");
 const router = express.Router();
@@ -33,6 +34,7 @@ router.post(
 router.post(`/chats/newchat`, auth, startSingleChat);
 
 router.get(`/chats`, auth, getAllChats);
+router.get(`/chats/:id`, auth, getSingleChat);
 router.post(`/messages`, auth, sendMessage);
 router.get(`/messages`, auth, getAllMessages);
 

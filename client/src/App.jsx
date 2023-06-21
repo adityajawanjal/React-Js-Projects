@@ -7,7 +7,7 @@ import { myInfo } from "./services/api";
 
 const App = () => {
   const token = localStorage.getItem("chatUser");
-  const { setAuth , auth } = useAccount();
+  const { setAuth, setLoading } = useAccount();
 
   const handleAuth = async () => {
     try {
@@ -15,15 +15,18 @@ const App = () => {
       if (!res.me) {
         console.log(res.msg);
       }
+      setLoading(false);
       setAuth(res.me);
     } catch (err) {
       console.log(err);
     }
   };
 
-  useEffect(()=>{
-   handleAuth();
-  },[token])
+  useEffect(() => {
+    if (token) {
+      handleAuth();
+    }
+  }, []);
 
   return (
     <>

@@ -50,7 +50,10 @@ exports.startSingleChat = async (req, res) => {
         .status(400)
         .json({ msg: `Error in startSingleChat , opponent not found !` });
     }
-
+    const singleChatExists = await Chat.findOne({users:opponentExists._id});
+    if(singleChatExists){
+      return res.status(200).json({ msg: `Chat Already Exists .`, chat: singleChatExists });
+    }
     const chat = new Chat({
       chatName: opponentExists.name,
       isGroupChat: false,
@@ -79,9 +82,21 @@ exports.getAllChats = async (req, res) => {
           path: "senderId",
           select: "name email pic",
         },
-      }).populate('admin','name email pic')
+      }).populate('admin','name email pic').sort({'createdAt':-1});
     res.status(200).json({ msg: `All chats Fetched !`, chats: chats });
   } catch (err) {
     res.status(400).json({ msg: `Error in getAllChats !`, err: err.message });
   }
 };
+
+exports.getSingleChat = async (req,res) =>{
+  try {
+    let chatExists = await Chat.findOne({_id:req.params.id}).populate('messages').populate('users','name email pic');
+    if(!chatExists){
+      return res.status(400).json({ msg: `No Single Chat !`});
+    }
+    res.status(200).json({ msg: `Single Chat Fetched !`, chat:chatExists });
+  } catch (err) {
+    res.status(400).json({ msg: `Error in getAllChats !`, err: err.message });
+  }
+}

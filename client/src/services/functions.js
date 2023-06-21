@@ -1,13 +1,21 @@
 import { login, signup } from "./api";
 
 export const handleSignUp = async (e) => {
+  let data;
   try {
-    const data = {
-      name: e.name,
-      email: e.email,
-      password: e.password,
-      pic: e.pic,
-    };
+    if (e.pic) {
+      data = new FormData();
+      data.append("name", e.name);
+      data.append("email", e.email);
+      data.append("password", e.password);
+      data.append("pic", e.pic);
+    } else {
+      data = {
+        name: e.name,
+        email: e.email,
+        password: e.password,
+      };
+    }
     const res = await signup(data);
     if (!res.token) {
       alert(res.msg);
@@ -38,11 +46,11 @@ export const handleLogin = async (e) => {
   }
 };
 
-export const handleLogout = () =>{
-    try {
-      localStorage.clear();
-      window.location.reload();
-    } catch (err) {
-      console.log(err);
-    }
-}
+export const handleLogout = () => {
+  try {
+    localStorage.clear();
+    window.location.reload();
+  } catch (err) {
+    console.log(err);
+  }
+};

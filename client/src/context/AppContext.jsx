@@ -10,7 +10,8 @@ const AppProvider = ({ children }) => {
   const [allMyChats, setAllMyChats] = useState([]);
   const [openMyChatDrawer, setOpenMyChatDrawer] = useState(false);
   const [selectedPerson, setSelectedPerson] = useState();
-  const [selectedChat, setSelectedChat] = useState();
+  const [currentChat, setCurrentChat] = useState();
+  const [loading, setLoading] = useState(false);
 
   return (
     <AppContext.Provider
@@ -29,8 +30,10 @@ const AppProvider = ({ children }) => {
         openMyChatDrawer,
         setSelectedPerson,
         selectedPerson,
-        setSelectedChat,
-        selectedChat,
+        setCurrentChat,
+        currentChat,
+        setLoading,
+        loading,
       }}
     >
       {children}

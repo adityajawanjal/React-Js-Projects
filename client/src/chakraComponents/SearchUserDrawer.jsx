@@ -10,17 +10,15 @@ import {
   Button,
   useDisclosure,
   Input,
-  Box,
   Stack,
 } from "@chakra-ui/react";
 import { useAccount } from "../context/AppContext";
-import { all } from "axios";
 import { SearchChatCards } from "../components/ChatCards";
 
 const SearchUserDrawer = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = useRef();
-  const { openSearch, setOpenSearch, allUsers } = useAccount();
+  const { openSearch, setOpenSearch, allUsers, auth } = useAccount();
 
   useEffect(() => {
     if (openSearch) {
@@ -53,10 +51,21 @@ const SearchUserDrawer = () => {
           <DrawerHeader>Create your account</DrawerHeader>
           <DrawerBody>
             <Input placeholder="Search User..." mb={"10"} autoFocus={true} />
-            <Stack>
+            <Stack
+              onClick={() => {
+                onClose();
+                setOpenSearch(false);
+              }}
+            >
               {allUsers
                 ? allUsers.map((e) => {
-                    return <SearchChatCards key={e._id} user={e} />;
+                    return auth ? (
+                      auth._id !== e._id && (
+                        <SearchChatCards key={e._id} user={e} />
+                      )
+                    ) : (
+                      <SearchChatCards key={e._id} user={e} />
+                    );
                   })
                 : "No User Found"}
             </Stack>

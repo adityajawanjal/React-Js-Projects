@@ -17,7 +17,7 @@ import { MyChatCards } from "./ChatCards";
 import PersonModal from "../chakraComponents/PersonModal";
 
 const Left = () => {
-  const { setOpenProfile , auth , setOpenSearch , allMyChats  } = useAccount();
+  const { setOpenProfile, auth, setOpenSearch, allMyChats } = useAccount();
   return (
     <>
       <Stack
@@ -38,22 +38,36 @@ const Left = () => {
           pb={"2"}
         >
           <Image
-            src={auth?auth.pic:''}
+            src={auth ? auth.pic : ""}
             alt="My-Profile-DP"
             w={"14"}
             h={"14"}
             borderRadius={"full"}
             _hover={{ cursor: "pointer" }}
-           onClick={()=>{setOpenProfile(true)}} 
+            onClick={() => {
+              setOpenProfile(true);
+            }}
           />
           <Menu>
-            <MenuButton as={"button"} >
+            <MenuButton as={"button"}>
               <GiHamburgerMenu size={32} />
             </MenuButton>
             <MenuList color={"black"}>
-              <MenuItem onClick={()=>{setOpenProfile(true)}} >Profile</MenuItem>
-              <MenuItem onClick={()=>{setOpenSearch(true)}} >Search User</MenuItem>
-              <MenuItem onClick={()=>handleLogout()} >Logout</MenuItem>
+              <MenuItem
+                onClick={() => {
+                  setOpenProfile(true);
+                }}
+              >
+                Profile
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  setOpenSearch(true);
+                }}
+              >
+                Search User
+              </MenuItem>
+              <MenuItem onClick={() => handleLogout()}>Logout</MenuItem>
             </MenuList>
           </Menu>
         </HStack>
@@ -73,21 +87,18 @@ const Left = () => {
             },
           }}
         >
-          {
-            allMyChats ? allMyChats.map((e)=>{
-              return(
-                <MyChatCards key={e._id} chat={e} />
-              )
-            }) :'Start a New Chat !'
-          }
+          {allMyChats
+            ? allMyChats.map((e) => {
+                return <MyChatCards key={e._id} chat={e} />;
+              })
+            : "Start a New Chat !"}
         </Stack>
       </Stack>
-      <ProfileModal/>
-      <SearchUserDrawer/>
-      <PersonModal/>
+      <ProfileModal />
+      <SearchUserDrawer />
+      <PersonModal />
     </>
   );
 };
 
 export default Left;
-

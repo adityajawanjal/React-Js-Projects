@@ -3,11 +3,11 @@ import { Grid } from "@chakra-ui/react";
 import Left from "./components/Left";
 import Right from "./components/Right";
 import SmHeader from "./components/SmHeader";
-import { getAllMyChats, getAllUsers } from "./services/api";
+import { getAllMyChats, getAllUsers, myInfo } from "./services/api";
 import { useAccount } from "./context/AppContext";
 
 const chatPage = () => {
-  const { setAllUsers , allusers , setAllMyChats , allMyChats} = useAccount();
+  const { setAllUsers, setAllMyChats, currentChat } = useAccount();
 
   const handleGetAllUsers = async () => {
     try {
@@ -21,25 +21,25 @@ const chatPage = () => {
     }
   };
 
-  const handleGetAllMyChats = async () =>{
+  const handleGetAllMyChats = async () => {
     try {
       const res = await getAllMyChats();
-      if(!res.chats){
+      if (!res.chats) {
         console.log(res.msg);
       }
       setAllMyChats(res.chats);
     } catch (err) {
       console.log(err);
     }
-  }
+  };
 
   useEffect(() => {
     handleGetAllUsers();
   }, []);
 
-  useEffect(()=>{
+  useEffect(() => {
     handleGetAllMyChats();
-  },[])
+  }, [currentChat]);
 
   return (
     <>

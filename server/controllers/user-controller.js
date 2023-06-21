@@ -83,7 +83,7 @@ exports.login = async (req, res) => {
 
 exports.getAllUsers = async (req, res) => {
   try {
-    const users = await User.find({}).select("name email pic");
+    const users = await User.find({}).select("name email pic").sort({'createdAt':-1});
     res.status(200).json({ msg: `All user Fetched !`, users: users });
   } catch (err) {
     res.status(400).json({ msg: `Error in getAllUsers !`, err: err.message });

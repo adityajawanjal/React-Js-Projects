@@ -28,7 +28,13 @@ const PersonModal = () => {
       )[0].email;
       return name;
     }
-    return "";
+    return selectedPerson.users.map((e) => {
+      return (
+        <span key={e.email}>
+          {e.name} - {e.email} <br />{" "}
+        </span>
+      );
+    });
   };
 
   useEffect(() => {

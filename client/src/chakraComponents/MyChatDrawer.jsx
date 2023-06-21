@@ -10,7 +10,6 @@ import {
   Button,
   useDisclosure,
   Input,
-  Box,
   Stack,
 } from "@chakra-ui/react";
 import { useAccount } from "../context/AppContext";
@@ -19,7 +18,7 @@ import { MyChatCards } from "../components/ChatCards";
 const MyChatDrawer = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = useRef();
-  const { allMyChats , openMyChatDrawer , setOpenMyChatDrawer } = useAccount();
+  const { allMyChats, openMyChatDrawer, setOpenMyChatDrawer } = useAccount();
 
   useEffect(() => {
     if (openMyChatDrawer) {

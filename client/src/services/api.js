@@ -10,48 +10,74 @@ const Api = axios.create({
   },
 });
 
-
-export const signup = async (data)=>{
+export const signup = async (data) => {
   try {
-    const res = await Api.post(`/users/signup`,data);
+    const res = await Api.post(`/users/signup`, data);
     return res.data;
   } catch (err) {
     return err.response.data;
   }
-}
+};
 
-export const login = async (data)=>{
+export const login = async (data) => {
   try {
-    const res = await Api.post(`/users/login`,data);
+    const res = await Api.post(`/users/login`, data);
     return res.data;
   } catch (err) {
     return err.response.data;
   }
-}
+};
 
-export const myInfo = async ()=>{
+export const myInfo = async () => {
   try {
     const res = await Api.get(`/users/me`);
     return res.data;
   } catch (err) {
     return err.response.data;
   }
-}
+};
 
-export const getAllUsers = async ()=>{
+export const getAllUsers = async () => {
   try {
     const res = await Api.get(`/users`);
     return res.data;
   } catch (err) {
     return err.response.data;
   }
-}
+};
 
-export const getAllMyChats = async ()=>{
+export const getAllMyChats = async () => {
   try {
     const res = await Api.get(`/chats`);
     return res.data;
   } catch (err) {
     return err.response.data;
   }
-}
+};
+
+export const startSingleChat = async (data) => {
+  try {
+    const res = await Api.post(`/chats/newchat`, data);
+    return res.data;
+  } catch (err) {
+    return err.response.data;
+  }
+};
+
+export const getSingleChat = async (id) => {
+  try {
+    const res = await Api.get(`/chats/${id}`);
+    return res.data;
+  } catch (err) {
+    return err.response.data;
+  }
+};
+
+export const sendMessage = async (data) => {
+  try {
+    const res = await Api.post(`/messages`, data);
+    return res.data;
+  } catch (err) {
+    return err.response.data;
+  }
+};
