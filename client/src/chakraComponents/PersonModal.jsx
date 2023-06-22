@@ -19,13 +19,12 @@ import { useAccount } from "../context/AppContext";
 const PersonModal = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = useRef();
-  const { selectedPerson, setSelectedperson } = useAccount();
+  const { selectedPerson, setSelectedperson, auth } = useAccount();
 
   const friendEmail = () => {
     if (selectedPerson.users.length < 3) {
-      const name = selectedPerson.users.filter(
-        (e) => e.name === selectedPerson.chatName
-      )[0].email;
+      const name = selectedPerson.users.filter((e) => e._id !== auth._id)[0]
+        .email;
       return name;
     }
     return selectedPerson.users.map((e) => {
@@ -64,10 +63,14 @@ const PersonModal = () => {
             <Stack gap={5} alignItems={"center"}>
               <Image
                 src={
-                  selectedPerson
-                    ? selectedPerson.groupIcon
-                      ? selectedPerson.groupIcon
-                      : selectedPerson.pic
+                  auth
+                    ? selectedPerson
+                      ? selectedPerson.pic ? selectedPerson.pic : selectedPerson.isGroupChat === true
+                        ? selectedPerson.groupIcon
+                        : selectedPerson.users.filter(
+                            (e) => e._id !== auth._id
+                          )[0].pic
+                      : ""
                     : ""
                 }
                 alt="My-Profile-DP"

@@ -51,7 +51,10 @@ const MyChatDrawer = () => {
           <DrawerHeader>My Chats : </DrawerHeader>
           <DrawerBody>
             <Input placeholder="Search User..." mb={"10"} autoFocus={true} />
-            <Stack h={"lg"}>
+            <Stack h={"lg"} onClick={() => {
+                onClose();
+                setOpenMyChatDrawer(false);
+              }} >
               {allMyChats
                 ? allMyChats.map((e) => {
                     return <MyChatCards key={e._id} chat={e} />;

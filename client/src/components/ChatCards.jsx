@@ -4,12 +4,13 @@ import { startSingleChat } from "../services/api";
 
 export const SearchChatCards = (data) => {
   const { setSelectedPerson, setCurrentChat } = useAccount();
+
   const handleStartSingleChat = async (userId) => {
     try {
-      const data = {
+      const info = {
         users: [userId],
       };
-      const res = await startSingleChat(data);
+      const res = await startSingleChat(info);
       if (!res.chat) {
         alert(res.msg);
       }
@@ -61,7 +62,7 @@ export const SearchChatCards = (data) => {
 };
 
 export const MyChatCards = (data) => {
-  const { setSelectedPerson, setCurrentChat } = useAccount();
+  const { setSelectedPerson, setCurrentChat, auth } = useAccount();
 
   return (
     <>
@@ -78,7 +79,15 @@ export const MyChatCards = (data) => {
         }}
       >
         <Image
-          src={data ? data.chat.groupIcon : ""}
+          src={
+            auth
+              ? data
+                ? data.chat.users.length > 1
+                  ? data.chat.users.filter((e) => e._id !== auth._id)[0].pic
+                  : ""
+                : " "
+              : ""
+          }
           alt="My-Profile-DP"
           w={"10"}
           h={"10"}
@@ -96,9 +105,27 @@ export const MyChatCards = (data) => {
           }}
         >
           <Text fontWeight={"bold"} fontSize={"md"}>
-            {data ? data.chat.chatName : ""}
+            {data
+              ? auth
+                ? data.chat.users.length > 1
+                  ? data.chat.users.filter((e) => e._id !== auth._id)[0].name
+                  : ""
+                : ""
+              : ""}
           </Text>
-          <Text fontSize={"sm"}>Katrina kaif</Text>
+          <Text fontSize={"xs"}>
+            {auth
+              ? data
+                ? data.chat.latestMessage
+                  ? data.chat.latestMessage.content
+                    ? data.chat.latestMessage
+                      ? data.chat.latestMessage.content
+                      : ""
+                    : ""
+                  : ""
+                : ""
+              : ""}
+          </Text>
         </Grid>
       </HStack>
     </>

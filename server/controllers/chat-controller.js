@@ -55,10 +55,8 @@ exports.startSingleChat = async (req, res) => {
       return res.status(200).json({ msg: `Chat Already Exists .`, chat: singleChatExists });
     }
     const chat = new Chat({
-      chatName: opponentExists.name,
       isGroupChat: false,
       users: users,
-      groupIcon: opponentExists.pic,
     });
     chat.users.push(req.user._id);
     const newSingleChat = await chat.save();
@@ -75,7 +73,7 @@ exports.startSingleChat = async (req, res) => {
 exports.getAllChats = async (req, res) => {
   try {
     const chats = await Chat.find({ users: req.user._id })
-      .populate("users",'name email pic')
+      .populate("users",'name email pic').populate('latestMessage')
       .populate({
         path: "messages",
         populate: {
@@ -91,7 +89,22 @@ exports.getAllChats = async (req, res) => {
 
 exports.getSingleChat = async (req,res) =>{
   try {
-    let chatExists = await Chat.findOne({_id:req.params.id}).populate('messages').populate('users','name email pic');
+    let chatExists = await Chat.findOne({_id:req.params.id}).populate({
+      path:'latestMessage',
+      populate:{
+        path:'senderId',
+        select:'name email pic'
+      }
+    }).populate({
+      path:'messages',
+      populate:{
+        path:'senderId',
+        select:'name email pic'
+      }
+    }).populate({
+      path:'users',
+      select:'name email pic'
+    })
     if(!chatExists){
       return res.status(400).json({ msg: `No Single Chat !`});
     }

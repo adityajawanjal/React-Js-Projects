@@ -78,7 +78,13 @@ const Right = () => {
           borderBottom={"2px solid orange"}
         >
           <Image
-            src={currentChat ? currentChat.groupIcon : ""}
+            src={
+              currentChat
+                ? currentChat.isGroupChat
+                  ? currentChat.groupIcon
+                  : currentChat.users.filter((e) => e._id !== auth._id)[0].pic
+                : ""
+            }
             alt="My-Profile-DP"
             w={"20"}
             h={"20"}
@@ -90,7 +96,11 @@ const Right = () => {
           />
           <Grid templateRows={"auto auto"} ml={"5"}>
             <Text fontWeight={"bold"} fontSize={{ base: "lg", md: "3xl" }}>
-              {currentChat ? currentChat.chatName : ""}
+              {currentChat
+                ? currentChat.isGroupChat
+                  ? currentChat.chatName
+                  : currentChat.users.filter((e) => e._id !== auth._id)[0].name
+                : ""}
             </Text>
             <Text fontSize={{ base: "sm", sm: "md" }}>offline</Text>
           </Grid>
@@ -129,7 +139,7 @@ const Right = () => {
                     h={"auto"}
                     alignSelf={
                       auth
-                        ? auth._id === e.senderId
+                        ? auth._id === e.senderId._id
                           ? "end"
                           : "flex-start"
                         : "flex-start"

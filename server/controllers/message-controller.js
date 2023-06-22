@@ -10,12 +10,16 @@ exports.sendMessage = async (req, res) => {
       chatId: chatId,
     });
     const newMessage = await message.save();
-    const sent = await Chat.findByIdAndUpdate(
-      { _id: chatId },
-      {
-        $push: { messages: newMessage._id },
+    const sent = await Chat.findByIdAndUpdate(chatId,{
+      $push:{
+        messages:newMessage._id
+      },
+      $set:{
+        latestMessage:newMessage._id
       }
-    );
+    },{
+      new:true
+    })
     res.status(201).json({ msg: "message sent." });
   } catch (err) {
     res.status(400).json({ msg: "err in send Message", err: err.message });

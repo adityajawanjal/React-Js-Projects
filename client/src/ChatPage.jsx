@@ -52,7 +52,10 @@ const chatPage = () => {
         justifyContent={"center"}
       >
         <Left />
-        <Right />
+        {
+          currentChat  ?  <Right /> :''
+        }
+       
       </Grid>
     </>
   );
