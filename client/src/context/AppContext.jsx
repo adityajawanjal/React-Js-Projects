@@ -1,4 +1,5 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
+import { BACKEND_URL } from "../services/api";
 
 const AppContext = createContext();
 
@@ -34,6 +35,7 @@ const AppProvider = ({ children }) => {
         currentChat,
         setLoading,
         loading,
+      
       }}
     >
       {children}

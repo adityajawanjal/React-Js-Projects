@@ -14,15 +14,19 @@ import { IoSend } from "react-icons/io5";
 import { useAccount } from "../context/AppContext";
 import { getSingleChat, sendMessage } from "../services/api";
 
+
 const Right = () => {
+  const { setSelectedPerson, currentChat, auth , allOnlineUsers  } = useAccount();
+
   const fileRef = useRef();
   const msgBox = useRef();
+
+  const [messages, setMessages] = useState([]);
+  const [text, setText] = useState();
 
   useEffect(() => {
     msgBox.current.scrollTo("0", msgBox.current.scrollHeight);
   });
-  const { setSelectedPerson, currentChat, auth } = useAccount();
-  const [messages, setMessages] = useState([]);
 
   const handleFileChange = () => {
     fileRef.current.click();
@@ -55,8 +59,6 @@ const Right = () => {
       handleGetSingleChat();
     }
   }, [currentChat]);
-
-  const [text, setText] = useState();
 
   return (
     <>
@@ -102,7 +104,22 @@ const Right = () => {
                   : currentChat.users.filter((e) => e._id !== auth._id)[0].name
                 : ""}
             </Text>
-            <Text fontSize={{ base: "sm", sm: "md" }}>offline</Text>
+            <Text
+              fontSize={{ base: "sm", sm: "md" }}
+              color={
+                allOnlineUsers
+                  ? allOnlineUsers.find((e) => e._id === currentChat._id)
+                    ? "whatsapp.400"
+                    : 'whitesmoke'
+                  : ""
+              }
+            >
+              {allOnlineUsers
+                ? currentChat ? allOnlineUsers.find((e) => currentChat._id === e._id )
+                ? "online"
+                : "offline" : 'offline'
+                : "offline"}
+            </Text>
           </Grid>
         </HStack>
         <Stack

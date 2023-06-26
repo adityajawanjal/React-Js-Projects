@@ -62,7 +62,7 @@ export const SearchChatCards = (data) => {
 };
 
 export const MyChatCards = (data) => {
-  const { setSelectedPerson, setCurrentChat, auth } = useAccount();
+  const { setSelectedPerson, setCurrentChat, auth} = useAccount();
 
   return (
     <>

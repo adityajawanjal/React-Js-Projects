@@ -2,9 +2,9 @@ import axios from "axios";
 
 const key = localStorage.getItem("chatUser");
 const token = JSON.parse(key);
-
+export const BACKEND_URL = `http://localhost:5000`;
 const Api = axios.create({
-  baseURL: `http://localhost:5000/api`,
+  baseURL: `${BACKEND_URL}/api`,
   headers: {
     Authorization: key ? `Bearer ${token}` : "",
   },
