@@ -62,7 +62,7 @@ export const SearchChatCards = (data) => {
 };
 
 export const MyChatCards = (data) => {
-  const { setSelectedPerson, setCurrentChat, auth} = useAccount();
+  const { setSelectedPerson, setCurrentChat, auth } = useAccount();
 
   return (
     <>
@@ -82,10 +82,12 @@ export const MyChatCards = (data) => {
           src={
             auth
               ? data
-                ? data.chat.users.length > 1
+                ? data.chat.users.length > 2
+                  ? data.chat.groupIcon
+                  : data.chat.users.length > 1
                   ? data.chat.users.filter((e) => e._id !== auth._id)[0].pic
                   : ""
-                : " "
+                : ""
               : ""
           }
           alt="My-Profile-DP"
@@ -105,9 +107,11 @@ export const MyChatCards = (data) => {
           }}
         >
           <Text fontWeight={"bold"} fontSize={"md"}>
-            {data
-              ? auth
-                ? data.chat.users.length > 1
+            {auth
+              ? data
+                ? data.chat.users.length > 2
+                  ? data.chat.chatName
+                  : data.chat.users.length > 1
                   ? data.chat.users.filter((e) => e._id !== auth._id)[0].name
                   : ""
                 : ""
@@ -126,6 +130,59 @@ export const MyChatCards = (data) => {
                 : ""
               : ""}
           </Text>
+        </Grid>
+      </HStack>
+    </>
+  );
+};
+
+export const SearchChatCardsForAddGroupChat = (data) => {
+  const { setGroupChatUsers, groupChatUsers } = useAccount();
+
+  const addToGroup = (e) => {
+    groupChatUsers
+      ? groupChatUsers.find((user) => e._id === user._id)
+        ? ""
+        : setGroupChatUsers([...groupChatUsers, data.user])
+      : "";
+  };
+
+  return (
+    <>
+      <HStack
+        h={"20"}
+        py={"2"}
+        px={"2"}
+        alignItems={"center"}
+        _hover={{
+          cursor: "pointer",
+          bgColor: "whatsapp.100",
+          color: "black",
+          borderRadius: "3xl",
+        }}
+      >
+        <Image
+          src={data ? data.user.pic : ""}
+          alt="My-Profile-DP"
+          w={"10"}
+          h={"10"}
+          borderRadius={"full"}
+          _hover={{ cursor: "pointer" }}
+          onClick={() => {
+            setSelectedPerson(data.user);
+          }}
+        />
+        <Grid
+          templateRows={"auto auto"}
+          ml={"2"}
+          onClick={() => {
+            addToGroup(data.user);
+          }}
+        >
+          <Text fontWeight={"bold"} fontSize={"md"}>
+            {data ? data.user.name : ""}
+          </Text>
+          <Text fontSize={"sm"}>Katrina kaif</Text>
         </Grid>
       </HStack>
     </>

@@ -2,6 +2,7 @@ import axios from "axios";
 
 const key = localStorage.getItem("chatUser");
 const token = JSON.parse(key);
+
 export const BACKEND_URL = `http://localhost:5000`;
 const Api = axios.create({
   baseURL: `${BACKEND_URL}/api`,
@@ -76,6 +77,15 @@ export const getSingleChat = async (id) => {
 export const sendMessage = async (data) => {
   try {
     const res = await Api.post(`/messages`, data);
+    return res.data;
+  } catch (err) {
+    return err.response.data;
+  }
+};
+
+export const newGroup = async (data) => {
+  try {
+    const res = await Api.post(`/chats/newgroup`, data);
     return res.data;
   } catch (err) {
     return err.response.data;

@@ -146,12 +146,14 @@ const Right = () => {
                 return (
                   <Box
                     key={e._id}
+                    pos={'relative'}
                     maxW={"80"}
                     mb={"3"}
                     mr={"2"}
                     border={"1px solid blue"}
                     borderRadius={"3xl"}
-                    p={"3"}
+                    px={"3"}
+                    py={'2'}
                     wordBreak={"break-word"}
                     h={"auto"}
                     alignSelf={
@@ -164,7 +166,16 @@ const Right = () => {
                     color={"linkedin.100"}
                     fontSize={"1.1rem"}
                   >
+                    {
+                      auth
+                      ? auth._id === e.senderId._id
+                        ? ""
+                        : <Text pos={'absolute'} top={'-5'} fontSize={'xs'} mb={'10'} >{e.senderId ? e.senderId.name ? e.senderId.name.split(' ')[0]:'':''}</Text>
+                      : ''
+                    }
+                    
                     {e.content}
+                    
                   </Box>
                 );
               })

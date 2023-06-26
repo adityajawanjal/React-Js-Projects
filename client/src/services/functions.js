@@ -1,4 +1,4 @@
-import { login, signup } from "./api";
+import { login, newGroup, signup } from "./api";
 
 export const handleSignUp = async (e) => {
   let data;
@@ -54,3 +54,16 @@ export const handleLogout = () => {
     console.log(err);
   }
 };
+
+export const handleNewGroup = async ({users , name}) =>{
+  try {
+    const usersId = users.map((e)=> e._id);
+    const data = {
+      users:usersId,
+      chatName:name
+    }
+    const res = await newGroup(data);
+  } catch (err) {
+    console.log(err);
+  }
+}

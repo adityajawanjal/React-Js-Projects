@@ -15,9 +15,10 @@ import SearchUserDrawer from "../chakraComponents/SearchUserDrawer";
 import { handleLogout } from "../services/functions";
 import { MyChatCards } from "./ChatCards";
 import PersonModal from "../chakraComponents/PersonModal";
+import AddGroupDrawer from "../chakraComponents/AddGroupDrawer";
 
 const Left = () => {
-  const { setOpenProfile, auth, setOpenSearch, allMyChats } = useAccount();
+  const { setOpenProfile, auth, setOpenSearch, allMyChats ,setOpenAddGroup} = useAccount();
   return (
     <>
       <Stack
@@ -67,6 +68,7 @@ const Left = () => {
               >
                 Search User
               </MenuItem>
+              <MenuItem onClick={()=>{setOpenAddGroup(true);}}>Create Group</MenuItem>
               <MenuItem onClick={() => handleLogout()}>Logout</MenuItem>
             </MenuList>
           </Menu>
@@ -97,6 +99,7 @@ const Left = () => {
       <ProfileModal />
       <SearchUserDrawer />
       <PersonModal />
+      <AddGroupDrawer/>
     </>
   );
 };

@@ -7,12 +7,14 @@ const AppProvider = ({ children }) => {
   const [openProfile, setOpenProfile] = useState(false);
   const [auth, setAuth] = useState();
   const [openSearch, setOpenSearch] = useState(false);
+  const [openAddGroup, setOpenAddGroup] = useState(false);
   const [allUsers, setAllUsers] = useState([]);
   const [allMyChats, setAllMyChats] = useState([]);
   const [openMyChatDrawer, setOpenMyChatDrawer] = useState(false);
   const [selectedPerson, setSelectedPerson] = useState();
   const [currentChat, setCurrentChat] = useState();
   const [loading, setLoading] = useState(false);
+  const [groupChatUsers, setGroupChatUsers] = useState([]);
 
   return (
     <AppContext.Provider
@@ -23,6 +25,8 @@ const AppProvider = ({ children }) => {
         auth,
         setOpenSearch,
         openSearch,
+        setOpenAddGroup,
+        openAddGroup,
         setAllUsers,
         allUsers,
         setAllMyChats,
@@ -35,7 +39,8 @@ const AppProvider = ({ children }) => {
         currentChat,
         setLoading,
         loading,
-      
+        setGroupChatUsers,
+        groupChatUsers,
       }}
     >
       {children}
