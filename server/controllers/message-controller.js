@@ -26,6 +26,31 @@ exports.sendMessage = async (req, res) => {
   }
 };
 
+exports.sendMediaMessage = async (req, res) => {
+  try {
+    const { chatId } = req.body;
+    const message = new Message({
+      senderId: req.user._id,
+      content: content,
+      chatId: chatId,
+    });
+    const newMessage = await message.save();
+    const sent = await Chat.findByIdAndUpdate(chatId,{
+      $push:{
+        messages:newMessage._id
+      },
+      $set:{
+        latestMessage:newMessage._id
+      }
+    },{
+      new:true
+    })
+    res.status(201).json({ msg: newMessage });
+  } catch (err) {
+    res.status(400).json({ msg: "err in send Message", err: err.message });
+  }
+};
+
 exports.getAllMessages = async (req,res) =>{
   try {
     const {chatId} = req.body;

@@ -13,22 +13,29 @@ import { ImAttachment } from "react-icons/im";
 import { IoSend } from "react-icons/io5";
 import { useAccount } from "../context/AppContext";
 import { getSingleChat, sendMessage } from "../services/api";
-// import socketIO from "socket.io-client";
+import socketIO from "socket.io-client";
 
-// const endpoint = `http://localhost:5000`;
+const endpoint = `http://localhost:5000`;
 
-// var socket;
+var socket;
+
 const Right = () => {
   const { setSelectedPerson, currentChat, auth , allOnlineUsers  } = useAccount();
-
+  
   const fileRef = useRef();
   const msgBox = useRef();
-
+  
   const [messages, setMessages] = useState([]);
   const [text, setText] = useState();
-
+  
   useEffect(() => {
-    socket = socketIO(endpoint , {transports:['websocket']});
+   socket = socketIO(endpoint , {transports:['websocket']});
+
+    socket.on('new msg',(msg)=>{
+      const mess = [...messages , msg];
+      setMessages(mess);
+    })
+
   },[]);
 
   useEffect(() => {
@@ -49,14 +56,13 @@ const Right = () => {
   };
 
   const handleSendMessage = async (e) => {
+    socket.emit('msg',{chatId:currentChat._id , msg:text});
     try {
       const data = {
         content: e.text,
         chatId: e.chatId,
       };
-      
-      const res = await sendMessage(data);
-      await handleGetSingleChat(data.chatId);
+      const res = await sendMessage(data);   
     } catch (err) {
       console.log(err);
     }
@@ -66,7 +72,7 @@ const Right = () => {
     if (currentChat) {
       handleGetSingleChat();
     }
-  }, [currentChat]);
+  }, [currentChat , messages]);
 
   return (
     <>
@@ -149,8 +155,7 @@ const Right = () => {
             },
           }}
         >
-          {messages
-            ? messages.map((e) => {
+          { messages.map((e) => {
                 return (
                   <Box
                     key={e._id}
@@ -185,7 +190,7 @@ const Right = () => {
                   </Box>
                 );
               })
-            : ""}
+            }
         </Stack>
         <HStack h={"14"} gap={5} color={"whitesmoke"} px={"3"}>
           <Box _hover={{ cursor: "pointer" }}>

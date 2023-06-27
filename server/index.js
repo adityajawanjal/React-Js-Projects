@@ -6,7 +6,6 @@ const connectDB = require("./db/conn");
 const app = express();
 const http = require('http');
 const socketIO = require("socket.io");
-const { log } = require("console");
 
 connectDB();
 
@@ -27,4 +26,9 @@ server.listen(process.env.PORT , ()=>{
 
 io.on('connection',(socket)=>{
   console.log('socket connected.');
+
+  socket.on('msg',({chatId , msg})=>{
+    socket.emit('new msg',msg);
+  })
+
 })
