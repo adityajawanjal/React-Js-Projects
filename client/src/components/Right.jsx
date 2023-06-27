@@ -13,8 +13,11 @@ import { ImAttachment } from "react-icons/im";
 import { IoSend } from "react-icons/io5";
 import { useAccount } from "../context/AppContext";
 import { getSingleChat, sendMessage } from "../services/api";
+// import socketIO from "socket.io-client";
 
+// const endpoint = `http://localhost:5000`;
 
+// var socket;
 const Right = () => {
   const { setSelectedPerson, currentChat, auth , allOnlineUsers  } = useAccount();
 
@@ -23,6 +26,10 @@ const Right = () => {
 
   const [messages, setMessages] = useState([]);
   const [text, setText] = useState();
+
+  useEffect(() => {
+    socket = socketIO(endpoint , {transports:['websocket']});
+  },[]);
 
   useEffect(() => {
     msgBox.current.scrollTo("0", msgBox.current.scrollHeight);
@@ -47,7 +54,8 @@ const Right = () => {
         content: e.text,
         chatId: e.chatId,
       };
-      await sendMessage(data);
+      
+      const res = await sendMessage(data);
       await handleGetSingleChat(data.chatId);
     } catch (err) {
       console.log(err);
@@ -158,19 +166,17 @@ const Right = () => {
                     h={"auto"}
                     alignSelf={
                       auth
-                        ? auth._id === e.senderId._id
-                          ? "end"
-                          : "flex-start"
-                        : "flex-start"
+                        ? e.senderId ? auth._id === e.senderId._id ? 'end':'flex-start' :'flex-start' :"flex-start"
+                          
                     }
                     color={"linkedin.100"}
                     fontSize={"1.1rem"}
                   >
                     {
                       auth
-                      ? auth._id === e.senderId._id
-                        ? ""
-                        : <Text pos={'absolute'} top={'-5'} fontSize={'xs'} mb={'10'} >{e.senderId ? e.senderId.name ? e.senderId.name.split(' ')[0]:'':''}</Text>
+                      ? e.senderId ? auth._id === e.senderId._id
+                      ? ""
+                      : <Text pos={'absolute'} top={'-5'} fontSize={'xs'} mb={'10'} >{e.senderId ? e.senderId.name ? e.senderId.name.split(' ')[0]:'':''}</Text> :''
                       : ''
                     }
                     

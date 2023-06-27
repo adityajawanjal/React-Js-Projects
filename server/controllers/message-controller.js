@@ -20,7 +20,7 @@ exports.sendMessage = async (req, res) => {
     },{
       new:true
     })
-    res.status(201).json({ msg: "message sent." });
+    res.status(201).json({ msg: newMessage });
   } catch (err) {
     res.status(400).json({ msg: "err in send Message", err: err.message });
   }

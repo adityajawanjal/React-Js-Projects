@@ -15,9 +15,16 @@ app.use(express.json());
 app.use('/api',router);
 
 const server = http.createServer(app);
-const io = socketIO(server);
+const io = socketIO(server ,{
+  cors:{
+    origin:`http://localhost:5173`
+  }
+});
 
 server.listen(process.env.PORT , ()=>{
   console.log(`App is listening on PORT : ${process.env.PORT}`);
 })
 
+io.on('connection',(socket)=>{
+  console.log('socket connected.');
+})
