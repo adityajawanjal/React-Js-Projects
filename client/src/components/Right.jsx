@@ -11,32 +11,33 @@ import {
 } from "@chakra-ui/react";
 import { ImAttachment } from "react-icons/im";
 import { IoSend } from "react-icons/io5";
+import { GrDownload } from "react-icons/gr";
 import { useAccount } from "../context/AppContext";
 import { getSingleChat, sendMessage } from "../services/api";
 import socketIO from "socket.io-client";
+import { handleSendMediaMessage } from "../services/functions";
+import { saveAs } from "file-saver";
 
 const endpoint = `http://localhost:5000`;
 
 var socket;
 
 const Right = () => {
-  const { setSelectedPerson, currentChat, auth , allOnlineUsers  } = useAccount();
-  
+  const { setSelectedPerson, currentChat, auth, allOnlineUsers } = useAccount();
+
   const fileRef = useRef();
   const msgBox = useRef();
-  
   const [messages, setMessages] = useState([]);
   const [text, setText] = useState();
-  
+  const [file, setFile] = useState();
+
   useEffect(() => {
-   socket = socketIO(endpoint , {transports:['websocket']});
+    socket = socketIO(endpoint, { transports: ["websocket"] });
 
-    socket.on('new msg',(msg)=>{
-      const mess = [...messages , msg];
-      setMessages(mess);
-    })
-
-  },[]);
+    socket.on("connect", () => {
+      console.log("Socket Connected.");
+    });
+  }, []);
 
   useEffect(() => {
     msgBox.current.scrollTo("0", msgBox.current.scrollHeight);
@@ -44,6 +45,13 @@ const Right = () => {
 
   const handleFileChange = () => {
     fileRef.current.click();
+    if (file) {
+      const data = {
+        chatId: currentChat._id,
+        file: file,
+      };
+      handleSendMediaMessage(data);
+    }
   };
 
   const handleGetSingleChat = async () => {
@@ -56,13 +64,14 @@ const Right = () => {
   };
 
   const handleSendMessage = async (e) => {
-    socket.emit('msg',{chatId:currentChat._id , msg:text});
+    socket.emit("msg", { msg: text });
     try {
       const data = {
         content: e.text,
         chatId: e.chatId,
       };
-      const res = await sendMessage(data);   
+      await sendMessage(data);
+      await handleGetSingleChat();
     } catch (err) {
       console.log(err);
     }
@@ -72,7 +81,7 @@ const Right = () => {
     if (currentChat) {
       handleGetSingleChat();
     }
-  }, [currentChat , messages]);
+  }, [currentChat]);
 
   return (
     <>
@@ -118,22 +127,6 @@ const Right = () => {
                   : currentChat.users.filter((e) => e._id !== auth._id)[0].name
                 : ""}
             </Text>
-            <Text
-              fontSize={{ base: "sm", sm: "md" }}
-              color={
-                allOnlineUsers
-                  ? allOnlineUsers.find((e) => e._id === currentChat._id)
-                    ? "whatsapp.400"
-                    : 'whitesmoke'
-                  : ""
-              }
-            >
-              {allOnlineUsers
-                ? currentChat ? allOnlineUsers.find((e) => currentChat._id === e._id )
-                ? "online"
-                : "offline" : 'offline'
-                : "offline"}
-            </Text>
           </Grid>
         </HStack>
         <Stack
@@ -155,42 +148,84 @@ const Right = () => {
             },
           }}
         >
-          { messages.map((e) => {
-                return (
-                  <Box
-                    key={e._id}
-                    pos={'relative'}
-                    maxW={"80"}
-                    mb={"3"}
-                    mr={"2"}
-                    border={"1px solid blue"}
-                    borderRadius={"3xl"}
-                    px={"3"}
-                    py={'2'}
-                    wordBreak={"break-word"}
-                    h={"auto"}
-                    alignSelf={
-                      auth
-                        ? e.senderId ? auth._id === e.senderId._id ? 'end':'flex-start' :'flex-start' :"flex-start"
-                          
-                    }
-                    color={"linkedin.100"}
-                    fontSize={"1.1rem"}
+          {messages.map((e) => {
+            return (
+              <Box
+                key={e._id}
+                pos={"relative"}
+                maxW={"80"}
+                mb={"3"}
+                mr={"2"}
+                border={"1px solid blue"}
+                borderRadius={"3xl"}
+                px={"3"}
+                py={"2"}
+                wordBreak={"break-word"}
+                h={"auto"}
+                alignSelf={
+                  auth
+                    ? e.senderId
+                      ? auth._id === e.senderId._id
+                        ? "end"
+                        : "flex-start"
+                      : "flex-start"
+                    : "flex-start"
+                }
+                color={"linkedin.100"}
+                fontSize={"1.1rem"}
+              >
+                {auth ? (
+                  e.senderId ? (
+                    auth._id === e.senderId._id ? (
+                      ""
+                    ) : (
+                      <Text
+                        pos={"absolute"}
+                        top={"-5"}
+                        fontSize={"xs"}
+                        mb={"10"}
+                      >
+                        {e.senderId
+                          ? e.senderId.name
+                            ? e.senderId.name.split(" ")[0]
+                            : ""
+                          : ""}
+                      </Text>
+                    )
+                  ) : (
+                    ""
+                  )
+                ) : (
+                  ""
+                )}
+
+                {e.content?.startsWith("https") ? (
+                  <HStack
+                    h={"14"}
+                    w={"28"}
+                    justifyContent={"space-between"}
+                    alignItems={"center"}
+                    color={"green.400"}
                   >
-                    {
-                      auth
-                      ? e.senderId ? auth._id === e.senderId._id
-                      ? ""
-                      : <Text pos={'absolute'} top={'-5'} fontSize={'xs'} mb={'10'} >{e.senderId ? e.senderId.name ? e.senderId.name.split(' ')[0]:'':''}</Text> :''
-                      : ''
-                    }
-                    
-                    {e.content}
-                    
-                  </Box>
-                );
-              })
-            }
+                    <Box
+                      bgColor={"whitesmoke"}
+                      borderRadius={"full"}
+                      p={"4"}
+                      cursor={"pointer"}
+                      onClick={() => saveAs(e.content)}
+                    >
+                      <GrDownload size={16} />
+                    </Box>
+                    <Text fontSize={"lg"}>
+                      {e.content ? e.content.split(".").pop() : ""}
+                    </Text>
+                  </HStack>
+                ) : (
+                  e.content
+                )}
+              </Box>
+            );
+          })}
         </Stack>
         <HStack h={"14"} gap={5} color={"whitesmoke"} px={"3"}>
           <Box _hover={{ cursor: "pointer" }}>
@@ -204,7 +239,12 @@ const Right = () => {
             onChange={(e) => setText(e.target.value)}
             value={text ? text : ""}
           />
-          <Input type="file" ref={fileRef} display={"none"} />
+          <Input
+            type="file"
+            ref={fileRef}
+            display={"none"}
+            onChange={(e) => setFile(e.target.files[0])}
+          />
           <Button
             bgColor={"linkedin.300"}
             color={"black"}
@@ -219,7 +259,13 @@ const Right = () => {
           >
             Send
           </Button>
-          <Box display={{ base: "flex", sm: "none" }}>
+          <Box
+            display={{ base: "flex", sm: "none" }}
+            onClick={() => {
+              setText();
+              handleSendMessage({ text: text, chatId: currentChat._id });
+            }}
+          >
             <IoSend size={28} />
           </Box>
         </HStack>

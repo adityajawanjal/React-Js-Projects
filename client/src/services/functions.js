@@ -1,4 +1,4 @@
-import { login, newGroup, signup } from "./api";
+import { login, newGroup, sendMediaMessage, signup } from "./api";
 
 export const handleSignUp = async (e) => {
   let data;
@@ -63,6 +63,17 @@ export const handleNewGroup = async ({users , name}) =>{
       chatName:name
     }
     const res = await newGroup(data);
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+export const handleSendMediaMessage = async (e) =>{
+  try {
+    const data = new FormData();
+    data.append('chatId',e.chatId);
+    data.append('file',e.file);
+    const res = await sendMediaMessage(data);
   } catch (err) {
     console.log(err);
   }

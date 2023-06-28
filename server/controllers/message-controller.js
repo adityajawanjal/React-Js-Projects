@@ -1,5 +1,8 @@
 const Message = require("../models/message-model");
 const Chat = require("../models/chat-model");
+const cloudinary = require("cloudinary").v2;
+const https = require('https');
+const fs = require('fs');
 
 exports.sendMessage = async (req, res) => {
   try {
@@ -29,9 +32,18 @@ exports.sendMessage = async (req, res) => {
 exports.sendMediaMessage = async (req, res) => {
   try {
     const { chatId } = req.body;
+    if (req.file) {
+      console.log(req.file);
+      const result = await cloudinary.uploader.upload(`${req.file.path}`, {
+        public_id: req.file.originalname,
+      });
+      console.log(result);
+      if (!result) {
+        return res.status(400).json({ msg: `Error in image upload !` });
+      }
     const message = new Message({
       senderId: req.user._id,
-      content: content,
+      content: result.secure_url,
       chatId: chatId,
     });
     const newMessage = await message.save();
@@ -46,6 +58,7 @@ exports.sendMediaMessage = async (req, res) => {
       new:true
     })
     res.status(201).json({ msg: newMessage });
+  }
   } catch (err) {
     res.status(400).json({ msg: "err in send Message", err: err.message });
   }
@@ -65,3 +78,4 @@ exports.getAllMessages = async (req,res) =>{
     res.status(400).json({ msg: "err in getAllMessages", err: err.message });
   }
 }
+

@@ -91,3 +91,12 @@ export const newGroup = async (data) => {
     return err.response.data;
   }
 };
+
+export const sendMediaMessage = async (data) => {
+  try {
+    const res = await Api.post(`/messages/media`, data);
+    return res.data;
+  } catch (err) {
+    return err.response.data;
+  }
+};

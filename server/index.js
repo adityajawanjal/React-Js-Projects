@@ -4,31 +4,30 @@ const cors = require("cors");
 const router = require("./routes/route");
 const connectDB = require("./db/conn");
 const app = express();
-const http = require('http');
+const http = require("http");
 const socketIO = require("socket.io");
 
 connectDB();
 
 app.use(cors());
 app.use(express.json());
-app.use('/api',router);
+app.use("/api", router);
 
 const server = http.createServer(app);
-const io = socketIO(server ,{
-  cors:{
-    origin:`http://localhost:5173`
-  }
+const io = socketIO(server, {
+  cors: {
+    origin: `http://localhost:5173`,
+  },
 });
 
-server.listen(process.env.PORT , ()=>{
+server.listen(process.env.PORT, () => {
   console.log(`App is listening on PORT : ${process.env.PORT}`);
-})
+});
 
-io.on('connection',(socket)=>{
-  console.log('socket connected.');
+io.on("connection", (socket) => {
+  console.log("socket connected.");
 
-  socket.on('msg',({chatId , msg})=>{
-    socket.emit('new msg',msg);
-  })
-
-})
+  socket.on("msg", ({ msg }) => {
+    socket.emit("new msg", msg);
+  });
+});

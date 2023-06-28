@@ -1,5 +1,5 @@
 const express = require("express");
-const { uploadProfilePic, uploadGroupIcon } = require("../middlewares/upload");
+const { uploadProfilePic, uploadGroupIcon, uploadMediaMessage } = require("../middlewares/upload");
 const { auth } = require("../middlewares/auth");
 const {
   signup,
@@ -14,7 +14,7 @@ const {
   getAllChats,
   getSingleChat,
 } = require("../controllers/chat-controller");
-const { sendMessage, getAllMessages } = require("../controllers/message-controller");
+const { sendMessage, getAllMessages, sendMediaMessage, getFile } = require("../controllers/message-controller");
 const router = express.Router();
 
 //users-controller
@@ -36,6 +36,7 @@ router.post(`/chats/newchat`, auth, startSingleChat);
 router.get(`/chats`, auth, getAllChats);
 router.get(`/chats/:id`, auth, getSingleChat);
 router.post(`/messages`, auth, sendMessage);
+router.post(`/messages/media`, auth, uploadMediaMessage.single('file'), sendMediaMessage);
 router.get(`/messages`, auth, getAllMessages);
 
 module.exports = router;

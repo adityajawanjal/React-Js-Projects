@@ -14,7 +14,7 @@ import MyChatDrawer from "../chakraComponents/MyChatDrawer";
 import { handleLogout } from "../services/functions";
 
 const SmHeader = () => {
-  const { setOpenProfile, setOpenSearch, setOpenMyChatDrawer, auth } =
+  const { setOpenProfile, setOpenSearch, setOpenMyChatDrawer, auth , setSelectedPerson } =
     useAccount();
 
   return (
@@ -35,6 +35,9 @@ const SmHeader = () => {
           w={"14"}
           h={"14"}
           borderRadius={"full"}
+          onClick={() => {
+            setSelectedPerson(data.chat);
+          }}
         />
         <Input type="search" placeholder="Search User..." maxW={"96"} />
         <Menu>
