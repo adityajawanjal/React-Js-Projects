@@ -14,22 +14,10 @@ app.use(cors());
 app.use(express.json());
 app.use("/api", router);
 
-// Deployment
-
-const dirname = path.resolve();
-app.use(express.static(path.join(__dirname+'/dist')));
-console.log(path.join(__dirname+'/dist'));
-app.get('*',(req,res)=>{
-  res.sendFile(__dirname+'/dist/index.html');
-})
-
-
-// Deployment
-
 const server = http.createServer(app);
 const io = socketIO(server, {
   cors: {
-    origin: `http://localhost:5173`,
+    origin: `${process.env.FRONTEND_URL}`,
   },
 });
 

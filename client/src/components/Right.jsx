@@ -13,11 +13,11 @@ import { ImAttachment } from "react-icons/im";
 import { IoSend } from "react-icons/io5";
 import { GrDownload } from "react-icons/gr";
 import { useAccount } from "../context/AppContext";
-import { getSingleChat, sendMediaMessage, sendMessage } from "../services/api";
+import { BACKEND_URL, getSingleChat, sendMediaMessage, sendMessage } from "../services/api";
 import socketIO from "socket.io-client";
 import { saveAs } from "file-saver";
 
-const endpoint = `http://localhost:5000`;
+const endpoint = `${BACKEND_URL}`;
 
 var socket;
 var newArr;
