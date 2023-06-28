@@ -13,22 +13,29 @@ import { ImAttachment } from "react-icons/im";
 import { IoSend } from "react-icons/io5";
 import { GrDownload } from "react-icons/gr";
 import { useAccount } from "../context/AppContext";
-import { getSingleChat, sendMessage } from "../services/api";
+import { getSingleChat, sendMediaMessage, sendMessage } from "../services/api";
 import socketIO from "socket.io-client";
-import { handleSendMediaMessage } from "../services/functions";
 import { saveAs } from "file-saver";
 
 const endpoint = `http://localhost:5000`;
 
 var socket;
+var newArr;
 
 const Right = () => {
-  const { setSelectedPerson, currentChat, auth, allOnlineUsers } = useAccount();
+  const {
+    setSelectedPerson,
+    currentChat,
+    auth,
+    allOnlineUsers,
+    messages,
+    setMessages,
+  } = useAccount();
 
   const fileRef = useRef();
   const msgBox = useRef();
-  const [messages, setMessages] = useState([]);
-  const [text, setText] = useState();
+  // const [messages, setMessages] = useState([]);
+  const [text, setText] = useState('');
   const [file, setFile] = useState();
 
   useEffect(() => {
@@ -37,7 +44,10 @@ const Right = () => {
     socket.on("connect", () => {
       console.log("Socket Connected.");
     });
-  }, []);
+
+    socket.emit("join_room", { room: currentChat._id });
+
+  }, [socket]);
 
   useEffect(() => {
     msgBox.current.scrollTo("0", msgBox.current.scrollHeight);
@@ -64,13 +74,37 @@ const Right = () => {
   };
 
   const handleSendMessage = async (e) => {
-    socket.emit("msg", { msg: text });
     try {
       const data = {
         content: e.text,
         chatId: e.chatId,
       };
-      await sendMessage(data);
+      const res = await sendMessage(data);
+      if(res){
+        socket.emit("msg", { msg: res, room: currentChat._id });
+      }
+      await handleGetSingleChat();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(()=>{
+    socket.on("new_msg", ({msg}) => {
+      newArr = [...messages , msg];
+      setMessages(newArr);
+    });
+  },[])
+
+  const handleSendMediaMessage = async (e) => {
+    try {
+      const data = new FormData();
+      data.append("chatId", e.chatId);
+      data.append("file", e.file);
+      const res = await sendMediaMessage(data);
+      if(res){
+        socket.emit("msg", { msg: res, room: currentChat._id });
+      }
       await handleGetSingleChat();
     } catch (err) {
       console.log(err);
@@ -148,7 +182,7 @@ const Right = () => {
             },
           }}
         >
-          {messages.map((e) => {
+          {messages?.map((e) => {
             return (
               <Box
                 key={e._id}
@@ -164,9 +198,11 @@ const Right = () => {
                 h={"auto"}
                 alignSelf={
                   auth
-                    ? e.senderId
-                      ? auth._id === e.senderId._id
-                        ? "end"
+                    ? e
+                      ? e.senderId
+                        ? auth._id === e.senderId._id
+                          ? "end"
+                          : "flex-start"
                         : "flex-start"
                       : "flex-start"
                     : "flex-start"
@@ -175,22 +211,26 @@ const Right = () => {
                 fontSize={"1.1rem"}
               >
                 {auth ? (
-                  e.senderId ? (
-                    auth._id === e.senderId._id ? (
-                      ""
+                  e ? (
+                    e.senderId ? (
+                      auth._id === e.senderId._id ? (
+                        ""
+                      ) : (
+                        <Text
+                          pos={"absolute"}
+                          top={"-5"}
+                          fontSize={"xs"}
+                          mb={"10"}
+                        >
+                          {e.senderId
+                            ? e.senderId.name
+                              ? e.senderId.name.split(" ")[0]
+                              : ""
+                            : ""}
+                        </Text>
+                      )
                     ) : (
-                      <Text
-                        pos={"absolute"}
-                        top={"-5"}
-                        fontSize={"xs"}
-                        mb={"10"}
-                      >
-                        {e.senderId
-                          ? e.senderId.name
-                            ? e.senderId.name.split(" ")[0]
-                            : ""
-                          : ""}
-                      </Text>
+                      ""
                     )
                   ) : (
                     ""
@@ -199,29 +239,33 @@ const Right = () => {
                   ""
                 )}
 
-                {e.content?.startsWith("https") ? (
-                  <HStack
-                    h={"14"}
-                    w={"28"}
-                    justifyContent={"space-between"}
-                    alignItems={"center"}
-                    color={"green.400"}
-                  >
-                    <Box
-                      bgColor={"whitesmoke"}
-                      borderRadius={"full"}
-                      p={"4"}
-                      cursor={"pointer"}
-                      onClick={() => saveAs(e.content)}
+                {e ? (
+                  e.content?.startsWith("https") ? (
+                    <HStack
+                      h={"14"}
+                      w={"28"}
+                      justifyContent={"space-between"}
+                      alignItems={"center"}
+                      color={"green.400"}
                     >
-                      <GrDownload size={16} />
-                    </Box>
-                    <Text fontSize={"lg"}>
-                      {e.content ? e.content.split(".").pop() : ""}
-                    </Text>
-                  </HStack>
+                      <Box
+                        bgColor={"whitesmoke"}
+                        borderRadius={"full"}
+                        p={"4"}
+                        cursor={"pointer"}
+                        onClick={() => saveAs(e.content)}
+                      >
+                        <GrDownload size={16} />
+                      </Box>
+                      <Text fontSize={"lg"}>
+                        {e.content ? `.${e.content.split(".").pop()}` : ""}
+                      </Text>
+                    </HStack>
+                  ) : (
+                    e.content
+                  )
                 ) : (
-                  e.content
+                  ""
                 )}
               </Box>
             );
@@ -261,6 +305,7 @@ const Right = () => {
           </Button>
           <Box
             display={{ base: "flex", sm: "none" }}
+            as="button"
             onClick={() => {
               setText();
               handleSendMessage({ text: text, chatId: currentChat._id });

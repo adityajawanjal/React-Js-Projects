@@ -67,14 +67,4 @@ export const handleNewGroup = async ({users , name}) =>{
     console.log(err);
   }
 }
-
-export const handleSendMediaMessage = async (e) =>{
-  try {
-    const data = new FormData();
-    data.append('chatId',e.chatId);
-    data.append('file',e.file);
-    const res = await sendMediaMessage(data);
-  } catch (err) {
-    console.log(err);
-  }
-}
+ 

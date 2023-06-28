@@ -14,6 +14,7 @@ const AppProvider = ({ children }) => {
   const [selectedPerson, setSelectedPerson] = useState();
   const [currentChat, setCurrentChat] = useState();
   const [loading, setLoading] = useState(false);
+  const [messages, setMessages] = useState([]);
   const [groupChatUsers, setGroupChatUsers] = useState([]);
 
   return (
@@ -41,6 +42,8 @@ const AppProvider = ({ children }) => {
         loading,
         setGroupChatUsers,
         groupChatUsers,
+        setMessages,
+        messages
       }}
     >
       {children}
