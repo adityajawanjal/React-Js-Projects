@@ -120,15 +120,16 @@ export const MyChatCards = (data) => {
           <Text fontSize={"xs"}>
             {auth
               ? data
-                ? data.chat.latestMessage
-                  ? data.chat.latestMessage.content
-                    ? data.chat.latestMessage
-                      ? data.chat.latestMessage.content
-                      : ""
-                    : ""
+                ? data.chat ? 
+                data.chat.latestMessage ?
+                data.chat.latestMessage.content ?
+                   data.chat.latestMessage.content.startsWith('http') ? 'media' :data.chat.latestMessage.content
+                   :''
+                   :''
+                  :''
                   : ""
                 : ""
-              : ""}
+              }
           </Text>
         </Grid>
       </HStack>
