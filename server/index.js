@@ -6,7 +6,6 @@ const connectDB = require("./db/conn");
 const app = express();
 const http = require("http");
 const socketIO = require("socket.io");
-const path = require('path');
 
 connectDB();
 
