@@ -34,7 +34,6 @@ const Right = () => {
 
   const fileRef = useRef();
   const msgBox = useRef();
-  // const [messages, setMessages] = useState([]);
   const [text, setText] = useState('');
   const [file, setFile] = useState();
 
@@ -91,10 +90,10 @@ const Right = () => {
 
   useEffect(()=>{
     socket.on("new_msg", ({msg}) => {
-      newArr = [...messages , msg];
-      setMessages(newArr);
+     const my = [...messages , msg];
+      setMessages(my);
     });
-  },[])
+  })
 
   const handleSendMediaMessage = async (e) => {
     try {
